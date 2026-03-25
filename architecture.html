@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Four Loop — Architecture</title>
+
+  <link rel="stylesheet" href="../style-example.css" />
+  <link rel="stylesheet" href="./team.css" />
+</head>
+
+<body>
+  <header>
+    <nav aria-label="Team navigation">
+      <a href="/teams/index.html">← Back to Teams</a>
+      <a href="./index.html">Team Home</a>
+      <a href="./ui.html">UI</a>
+      <a href="./db.html">Database</a>
+      <a href="./routes.html">Routes</a>
+      <a href="./architecture.html" aria-current="page">Architecture</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Architecture Documentation</h1>
+    <p>High-level architecture for <strong>SourceFlow</strong> (Personal Shopping Request System).</p>
+
+    <div class="grid">
+      <section class="card pad">
+        <h2>System overview</h2>
+        <ul>
+          <li><strong>Client:</strong> HTML/CSS pages (documentation + UI screens)</li>
+          <li><strong>Server:</strong> JavaScript server handling routes + validation</li>
+          <li><strong>Database:</strong> SQLite schema (customers, requests, statuses, request_notes)</li>
+        </ul>
+
+        <pre>
+Browser (UI pages)
+   |
+   | HTTP (GET/POST/PUT/DELETE)
+   v
+JavaScript Web Server (routes + validation)
+   |
+   | SQL queries
+   v
+SQLite Database
+        </pre>
+      </section>
+
+      <section class="card pad">
+        <h2>Data flow</h2>
+        <ol>
+          <li>Customer submits a request (item, size, budget, preferences).</li>
+          <li>Server validates and inserts into <code>requests</code> with default status <code>New</code>.</li>
+          <li>Concierge updates status (In Progress → Sourced → Completed).</li>
+          <li>Concierge adds notes into <code>request_notes</code>.</li>
+          <li>Customer views status and updates via request list/detail.</li>
+        </ol>
+      </section>
+    </div>
+
+    <section class="card pad" style="margin-top:18px;">
+      <h2>Non-functional considerations</h2>
+      <ul>
+        <li><strong>Accessibility:</strong> semantic HTML, labels, contrast, keyboard-friendly nav.</li>
+        <li><strong>Maintainability:</strong> clean schema + predictable routes.</li>
+        <li><strong>Security (future):</strong> auth for concierge/admin actions.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p><a href="./index.html">Back to Team Home</a></p>
+  </footer>
+</body>
+</html>

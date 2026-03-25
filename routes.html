@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Four Loop — Routes</title>
+
+  <link rel="stylesheet" href="../style-example.css" />
+  <link rel="stylesheet" href="./team.css" />
+</head>
+
+<body>
+  <header>
+    <nav aria-label="Team navigation">
+      <a href="/teams/index.html">← Back to Teams</a>
+      <a href="./index.html">Team Home</a>
+      <a href="./ui.html">UI</a>
+      <a href="./db.html">Database</a>
+      <a href="./routes.html" aria-current="page">Routes</a>
+      <a href="./architecture.html">Architecture</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Routes Documentation</h1>
+    <p>Planned HTTP routes for <strong>SourceFlow</strong>, mapped cleanly to CRUD operations.</p>
+
+    <section class="card pad">
+      <h2>Core API routes</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Route</th>
+            <th>CRUD</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>GET</td><td>/requests</td><td>Read</td><td>List requests (filter by status/customer)</td></tr>
+          <tr><td>GET</td><td>/requests/:id</td><td>Read</td><td>View single request + notes</td></tr>
+          <tr><td>POST</td><td>/requests</td><td>Create</td><td>Create a request</td></tr>
+          <tr><td>PUT</td><td>/requests/:id</td><td>Update</td><td>Update request details/status</td></tr>
+          <tr><td>DELETE</td><td>/requests/:id</td><td>Delete</td><td>Remove request (and notes)</td></tr>
+          <tr><td>GET</td><td>/requests/:id/notes</td><td>Read</td><td>List notes for a request</td></tr>
+          <tr><td>POST</td><td>/requests/:id/notes</td><td>Create</td><td>Add concierge note</td></tr>
+          <tr><td>GET</td><td>/customers</td><td>Read</td><td>List customers</td></tr>
+          <tr><td>POST</td><td>/customers</td><td>Create</td><td>Create customer profile</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card pad" style="margin-top:18px;">
+      <h2>Example request/response</h2>
+
+      <h3>Create request</h3>
+      <pre>
+POST /requests
+Content-Type: application/json
+
+{
+  "customer_id": 1,
+  "item_name": "Trench coat",
+  "brand": "Burberry",
+  "budget_gbp": 900,
+  "size": "M",
+  "colour": "Beige"
+}
+      </pre>
+
+      <h3>Response</h3>
+      <pre>
+201 Created
+{
+  "request_id": 12,
+  "status": "New",
+  "created_at": "2026-02-20T10:15:00Z"
+}
+      </pre>
+    </section>
+  </main>
+
+  <footer>
+    <p><a href="./index.html">Back to Team Home</a></p>
+  </footer>
+</body>
+</html>
