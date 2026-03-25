@@ -10,6 +10,11 @@ const DB_PATH = join(DATA_DIR, "sourceflow.db");
 
 let dbInstance = null;
 
+/**
+ * Initialises the SQLite database, creates tables if they don't exist,
+ * seeds the statuses lookup table, and returns the shared database instance.
+ * @returns {DatabaseSync} The open database connection.
+ */
 export function getDb() {
   if (dbInstance) return dbInstance;
 
@@ -61,10 +66,20 @@ export function getDb() {
   return dbInstance;
 }
 
+/**
+ * Returns the absolute file-system path to the SQLite database file.
+ * @returns {string} Absolute path to sourceflow.db.
+ */
 export function getDbPath() {
   return DB_PATH;
 }
 
+/**
+ * Resolves a status name string (e.g. "In Progress") to its numeric primary key.
+ * Throws if the status name is not found in the statuses table.
+ * @param {string} statusName - Human-readable status name.
+ * @returns {number} The matching status_id.
+ */
 export function getStatusIdByName(statusName) {
   const db = getDb();
   const row = db.prepare(
@@ -75,6 +90,10 @@ export function getStatusIdByName(statusName) {
   return row.status_id;
 }
 
+/**
+ * Returns all requests joined with their current status name, ordered newest first.
+ * @returns {object[]} Array of request row objects.
+ */
 export function listRequests() {
   const db = getDb();
 
@@ -97,6 +116,12 @@ export function listRequests() {
   `).all();
 }
 
+/**
+ * Fetches a single request by its primary key, joined with its status name.
+ * Returns undefined if no matching row is found.
+ * @param {number} requestId - The request_id to look up.
+ * @returns {object|undefined} The request row, or undefined if not found.
+ */
 export function getRequestById(requestId) {
   const db = getDb();
 
@@ -119,6 +144,12 @@ export function getRequestById(requestId) {
   `).get(requestId);
 }
 
+/**
+ * Inserts a new request row with status "New" and returns the created record.
+ * @param {object} payload - Fields: customer_name, customer_email, item_name, brand,
+ *   budget_gbp, size, colour, request_password.
+ * @returns {object} The newly created request row.
+ */
 export function createRequest(payload) {
   const db = getDb();
   const now = new Date().toISOString();
@@ -155,6 +186,13 @@ export function createRequest(payload) {
   return getRequestById(result.lastInsertRowid);
 }
 
+/**
+ * Checks whether the supplied plain-text password matches the stored password
+ * for the given request. Returns false if the request does not exist.
+ * @param {number} requestId - The request to authenticate against.
+ * @param {string} password - Plain-text password to verify.
+ * @returns {boolean} True if the password matches, false otherwise.
+ */
 export function verifyRequestPassword(requestId, password) {
   const db = getDb();
 
@@ -168,6 +206,13 @@ export function verifyRequestPassword(requestId, password) {
   return row.request_password === password;
 }
 
+/**
+ * Changes the status of a request and updates the updated_at timestamp.
+ * Returns the updated request row.
+ * @param {number} requestId - ID of the request to update.
+ * @param {string} statusName - New status name (must exist in the statuses table).
+ * @returns {object} The updated request row.
+ */
 export function updateRequestStatus(requestId, statusName) {
   const db = getDb();
   const statusId = getStatusIdByName(statusName);
@@ -182,6 +227,21 @@ export function updateRequestStatus(requestId, statusName) {
   return getRequestById(requestId);
 }
 
+/**
+ * Permanently deletes a request row. Associated notes are removed automatically
+ * via the ON DELETE CASCADE foreign key on request_notes.
+ * @param {number} requestId - ID of the request to delete.
+ */
+export function deleteRequest(requestId) {
+  const db = getDb();
+  db.prepare("DELETE FROM requests WHERE request_id = ?").run(requestId);
+}
+
+/**
+ * Inserts a new note for the given request with the current timestamp.
+ * @param {number} requestId - ID of the parent request.
+ * @param {string} noteText - Text content of the note.
+ */
 export function addNote(requestId, noteText) {
   const db = getDb();
   const now = new Date().toISOString();
@@ -192,6 +252,11 @@ export function addNote(requestId, noteText) {
   `).run(requestId, noteText, now);
 }
 
+/**
+ * Returns all notes for a given request, ordered newest first.
+ * @param {number} requestId - ID of the parent request.
+ * @returns {object[]} Array of note row objects.
+ */
 export function listNotesForRequest(requestId) {
   const db = getDb();
 
@@ -206,6 +271,11 @@ export function listNotesForRequest(requestId) {
   `).all(requestId);
 }
 
+/**
+ * Aggregates dashboard summary statistics: total, new, in-progress, and completed
+ * request counts, plus the five most recent requests.
+ * @returns {{ total: number, newCount: number, inProgress: number, completed: number, recent: object[] }}
+ */
 export function getDashboardSummary() {
   const db = getDb();
 

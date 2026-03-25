@@ -1,3 +1,4 @@
+/* Design tokens — single source of truth for colours, surfaces, and shadows */
 :root {
   --bg-start: #0b1029;
   --bg-end: #112a60;
@@ -13,10 +14,12 @@
   --completed: #7ad88d;
 }
 
+/* Universal box-sizing so padding never overflows element bounds */
 * {
   box-sizing: border-box;
 }
 
+/* Full-viewport dark-blue gradient background for all pages */
 body {
   margin: 0;
   font-family: Inter, Arial, Helvetica, sans-serif;
@@ -28,12 +31,14 @@ body {
   min-height: 100vh;
 }
 
+/* Sticky-style top navigation bar with frosted-glass backdrop blur */
 .topbar {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(6, 8, 25, 0.85);
   backdrop-filter: blur(8px);
 }
 
+/* Centered inner wrapper for topbar content — flexbox keeps brand and nav apart */
 .topbar-inner {
   max-width: 1180px;
   margin: 0 auto;
@@ -48,8 +53,11 @@ body {
 .brand {
   font-size: 1.5rem;
   font-weight: 800;
+  /* fit-content prevents the brand from stretching in a flex or grid context */
+  width: fit-content;
 }
 
+/* Horizontal navigation links that wrap naturally on small screens */
 .topnav {
   display: flex;
   gap: 0.75rem;
@@ -64,18 +72,21 @@ body {
   font-weight: 600;
 }
 
+/* Highlight the active page link and hovered links with a subtle surface */
 .topnav a[aria-current="page"],
 .topnav a:hover {
   background: var(--surface-strong);
   border: 1px solid var(--border);
 }
 
+/* Centered content column with comfortable horizontal padding */
 .app-shell {
   max-width: 1180px;
   margin: 0 auto;
   padding: 2rem 1rem 4rem;
 }
 
+/* Hero flexbox: title block on the left, action buttons pushed to the right */
 .hero-panel {
   display: flex;
   justify-content: space-between;
@@ -110,6 +121,7 @@ h1 {
   line-height: 1.6;
 }
 
+/* Shared button and link-button styles — inline-flex keeps icon+text aligned */
 .button-link,
 button {
   display: inline-flex;
@@ -131,6 +143,7 @@ button {
   background: rgba(255, 255, 255, 0.08);
 }
 
+/* 4-column stats grid — collapses to 1 column below the 980 px breakpoint */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -138,6 +151,7 @@ button {
   margin-bottom: 1.5rem;
 }
 
+/* Glass card used for both stat tiles and content panels */
 .stat-card,
 .panel {
   background: var(--surface);
@@ -159,22 +173,35 @@ button {
   font-weight: 800;
 }
 
+/*
+ * 2-column dashboard layout with named grid areas so each panel has a
+ * semantic slot: "left" for the form/input panel, "right" for the list panel.
+ * Collapses to a single column below 980 px.
+ */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1.05fr 1.2fr;
+  grid-template-areas: "left right";
   gap: 1rem;
 }
 
+/* Assign each direct child article to its named grid area */
+.dashboard-grid > article:nth-child(1) { grid-area: left; }
+.dashboard-grid > article:nth-child(2) { grid-area: right; }
+
+/* 2-column detail grid for the request detail page */
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
+/* Wide panel variant that spans the full grid width (used for status update row) */
 .panel-wide {
   grid-column: 1 / -1;
 }
 
+/* Panel header: title left, secondary action or badge right */
 .panel-header {
   display: flex;
   justify-content: space-between;
@@ -201,22 +228,26 @@ button {
   flex-wrap: wrap;
 }
 
+/* 3-column form field grid so inputs align in a tidy layout */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
 
+/* Compact 2-column variant for shorter forms such as the quick request widget */
 .form-grid.compact {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+/* Labels are block elements so their text sits above the associated input */
 label {
   display: block;
   font-weight: 700;
   color: var(--muted);
 }
 
+/* Dark, translucent input fields with consistent border and padding */
 input,
 select,
 textarea {
@@ -235,6 +266,7 @@ textarea {
   min-height: 6rem;
 }
 
+/* Action row: button(s) and status message sit inline with wrapping */
 .actions,
 .status-actions {
   display: flex;
@@ -249,6 +281,7 @@ textarea {
   color: var(--muted);
 }
 
+/* Horizontal scroll wrapper prevents narrow tables from overflowing their panel */
 .table-wrap {
   overflow-x: auto;
 }
@@ -278,11 +311,13 @@ th {
   text-decoration: underline;
 }
 
+/* Vertical stack of list items with consistent spacing */
 .list-stack {
   display: grid;
   gap: 0.8rem;
 }
 
+/* Individual list item tile with subtle translucent background */
 .list-item {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -297,6 +332,7 @@ th {
   flex-wrap: wrap;
 }
 
+/* Status badge pill — colour is applied via status-* modifier classes */
 .status-pill {
   display: inline-flex;
   align-items: center;
@@ -312,6 +348,7 @@ th {
 .status-sourced { color: var(--sourced); }
 .status-completed { color: var(--completed); }
 
+/* Key-value detail rows stacked vertically within a panel */
 .detail-list {
   display: grid;
   gap: 0.75rem;
@@ -325,6 +362,7 @@ th {
   padding-bottom: 0.5rem;
 }
 
+/* Chronological timeline items — dot + text side by side */
 .timeline-list {
   display: grid;
   gap: 0.8rem;
@@ -344,6 +382,7 @@ th {
   background: rgba(255,255,255,0.4);
 }
 
+/* Individual note card — matches list-item aesthetic */
 .note-card {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.08);
@@ -356,13 +395,36 @@ th {
   padding: 1rem 0;
 }
 
+/* Page footer — centred and separated from the main content */
+.app-footer {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.app-footer a {
+  color: var(--muted);
+  text-decoration: underline;
+}
+
+/* Single-column responsive layout — all grids stack vertically below 980 px */
 @media (max-width: 980px) {
   .stats-grid,
-  .dashboard-grid,
   .detail-grid,
   .form-grid,
   .form-grid.compact {
     grid-template-columns: 1fr;
+  }
+
+  /* Reset dashboard grid to single column and redefine named areas vertically */
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "left"
+      "right";
   }
 
   .hero-panel {

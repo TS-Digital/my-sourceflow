@@ -19,26 +19,24 @@
   </header>
 
   <main class="app-shell" id="adminPage">
-    <section class="hero-panel">
+    <section class="hero-panel" aria-labelledby="admin-heading">
       <div>
         <p class="eyebrow">Concierge View</p>
-        <h1>Admin Queue</h1>
+        <h1 id="admin-heading">Admin Queue</h1>
         <p class="intro">
           Review requests, update statuses, and open request detail records.
         </p>
       </div>
     </section>
 
-    <section class="panel" id="adminLoginCard">
+    <section class="panel" id="adminLoginCard" aria-labelledby="admin-login-heading">
       <div class="panel-header">
-        <h2>Admin access</h2>
+        <h2 id="admin-login-heading">Admin access</h2>
       </div>
 
       <form id="adminLoginForm" novalidate>
-        <label>
-          Password
-          <input id="adminPasswordInput" type="password" />
-        </label>
+        <label for="adminPasswordInput">Password</label>
+        <input id="adminPasswordInput" type="password" />
 
         <div class="actions">
           <button type="submit">Enter Admin</button>
@@ -47,9 +45,9 @@
       </form>
     </section>
 
-    <section class="panel" id="adminPanel" hidden>
+    <section class="panel" id="adminPanel" hidden aria-labelledby="admin-queue-heading">
       <div class="panel-header">
-        <h2>Request Queue</h2>
+        <h2 id="admin-queue-heading">Request Queue</h2>
         <div class="panel-actions">
           <button type="button" id="refreshAdminBtn" class="secondary-btn">Refresh</button>
           <button type="button" id="logoutAdminBtn" class="secondary-btn">Log out</button>
@@ -58,6 +56,7 @@
 
       <div class="table-wrap">
         <table aria-label="Admin requests table">
+          <caption>All customer requests — admin view</caption>
           <thead>
             <tr>
               <th>ID</th>
@@ -73,6 +72,12 @@
       </div>
     </section>
   </main>
+
+  <footer class="app-footer">
+    <nav aria-label="Footer navigation">
+      <a href="/app/index.html">Back to Dashboard</a>
+    </nav>
+  </footer>
 
   <script src="./app.js"></script>
 </body>

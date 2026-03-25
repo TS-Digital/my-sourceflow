@@ -19,10 +19,10 @@
   </header>
 
   <main class="app-shell">
-    <section class="hero-panel">
+    <section class="hero-panel" aria-labelledby="dashboard-heading">
       <div>
         <p class="eyebrow">Personal Shopping Request System</p>
-        <h1>Home Dashboard</h1>
+        <h1 id="dashboard-heading">Home Dashboard</h1>
         <p class="intro">
           Submit sourcing requests, track progress, and review recent activity
           from a single responsive interface.
@@ -34,7 +34,7 @@
       </div>
     </section>
 
-    <section class="stats-grid" id="statsGrid">
+    <section class="stats-grid" id="statsGrid" aria-label="Request statistics">
       <article class="stat-card">
         <h2>Total Requests</h2>
         <p id="statTotal">0</p>
@@ -53,7 +53,7 @@
       </article>
     </section>
 
-    <section class="dashboard-grid">
+    <section class="dashboard-grid" aria-label="Dashboard panels">
       <article class="panel">
         <div class="panel-header">
           <h2>Quick Request</h2>
@@ -62,22 +62,22 @@
 
         <form id="quickRequestForm" novalidate>
           <div class="form-grid compact">
-            <label>
-              Item name
+            <div>
+              <label for="quick_item_name">Item name</label>
               <input id="quick_item_name" required />
-            </label>
-            <label>
-              Brand
+            </div>
+            <div>
+              <label for="quick_brand">Brand</label>
               <input id="quick_brand" />
-            </label>
-            <label>
-              Size
+            </div>
+            <div>
+              <label for="quick_size">Size</label>
               <input id="quick_size" />
-            </label>
-            <label>
-              Budget (£)
+            </div>
+            <div>
+              <label for="quick_budget">Budget (£)</label>
               <input id="quick_budget" type="number" step="0.01" min="0" />
-            </label>
+            </div>
           </div>
 
           <div class="actions">
@@ -97,6 +97,12 @@
       </article>
     </section>
   </main>
+
+  <footer class="app-footer">
+    <nav aria-label="Footer navigation">
+      <a href="/app/index.html">Back to Dashboard</a>
+    </nav>
+  </footer>
 
   <script src="./app.js"></script>
 </body>
