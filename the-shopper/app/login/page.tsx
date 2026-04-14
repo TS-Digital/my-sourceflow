@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
-type Mode = 'signin' | 'signup'
+type Mode = 'signin' | 'signup' | 'forgot'
 
 const inputCls =
   'w-full bg-brand-bg border border-brand-border text-brand-text font-sans px-4 py-3 text-sm ' +
@@ -21,6 +21,12 @@ export default function LoginPage() {
   const router = useRouter()
   const supabase = createClient()
 
+  const reset = (next: Mode) => {
+    setMode(next)
+    setError('')
+    setMessage('')
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -28,15 +34,22 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
+      if (mode === 'forgot') {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/auth/callback?next=/auth/reset-password`,
+        })
+        if (error) throw error
+        setMessage('Check your inbox — we sent a password reset link.')
+        return
+      }
+
       if (mode === 'signin') {
         const { error } = await supabase.auth.signInWithPassword({ email, password })
         if (error) throw error
         router.push('/dashboard')
         router.refresh()
       } else {
-        if (!fullName.trim()) {
-          throw new Error('Please enter your full name.')
-        }
+        if (!fullName.trim()) throw new Error('Please enter your full name.')
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -55,6 +68,18 @@ export default function LoginPage() {
     }
   }
 
+  const heading =
+    mode === 'signin' ? 'Welcome Back' : mode === 'signup' ? 'Create Account' : 'Reset Password'
+
+  const submitLabel =
+    loading
+      ? 'Please wait…'
+      : mode === 'signin'
+        ? 'Sign In'
+        : mode === 'signup'
+          ? 'Create Account'
+          : 'Send Reset Link'
+
   return (
     <main className="min-h-screen bg-brand-bg flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-[380px]">
@@ -72,9 +97,13 @@ export default function LoginPage() {
 
         {/* Card */}
         <div className="bg-brand-surface border border-brand-border p-8">
-          <h2 className="font-display text-3xl text-brand-text uppercase mb-6">
-            {mode === 'signin' ? 'Welcome Back' : 'Create Account'}
-          </h2>
+          <h2 className="font-display text-3xl text-brand-text uppercase mb-6">{heading}</h2>
+
+          {mode === 'forgot' && !message && (
+            <p className="mb-5 font-sans text-xs text-brand-muted leading-relaxed">
+              Enter your email and we&apos;ll send you a link to reset your password.
+            </p>
+          )}
 
           {message && (
             <div className="mb-5 p-3 bg-emerald-950/50 border border-emerald-900/50 text-emerald-400 font-sans text-xs">
@@ -88,82 +117,102 @@ export default function LoginPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {mode === 'signup' && (
+          {/* Hide form after forgot success */}
+          {!(mode === 'forgot' && message) && (
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {mode === 'signup' && (
+                <div>
+                  <label className="block font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-2">
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    required
+                    className={inputCls}
+                    placeholder="Your full name"
+                    autoComplete="name"
+                  />
+                </div>
+              )}
+
               <div>
                 <label className="block font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-2">
-                  Full Name
+                  Email
                 </label>
                 <input
-                  type="text"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                   className={inputCls}
-                  placeholder="Your full name"
-                  autoComplete="name"
+                  placeholder="your@email.com"
+                  autoComplete="email"
                 />
               </div>
+
+              {mode !== 'forgot' && (
+                <div>
+                  <label className="block font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-2">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    className={inputCls}
+                    placeholder="••••••••"
+                    autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+                  />
+                  {mode === 'signin' && (
+                    <button
+                      type="button"
+                      onClick={() => reset('forgot')}
+                      className="mt-2 font-mono text-[10px] text-brand-muted hover:text-brand-gold transition-colors uppercase tracking-widest"
+                    >
+                      Forgot password?
+                    </button>
+                  )}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-brand-gold text-brand-bg font-mono text-[11px] font-bold tracking-[0.2em] uppercase py-3 min-h-[44px] mt-2 hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
+              >
+                {submitLabel}
+              </button>
+            </form>
+          )}
+
+          <div className="mt-6 text-center font-sans text-xs text-brand-muted space-y-2">
+            {mode === 'forgot' ? (
+              <p>
+                <button
+                  type="button"
+                  onClick={() => reset('signin')}
+                  className="text-brand-gold hover:text-brand-gold-hover transition-colors underline underline-offset-2"
+                >
+                  Back to sign in
+                </button>
+              </p>
+            ) : (
+              <p>
+                {mode === 'signin' ? "Don't have an account?" : 'Already have an account?'}{' '}
+                <button
+                  type="button"
+                  onClick={() => reset(mode === 'signin' ? 'signup' : 'signin')}
+                  className="text-brand-gold hover:text-brand-gold-hover transition-colors underline underline-offset-2"
+                >
+                  {mode === 'signin' ? 'Sign up' : 'Sign in'}
+                </button>
+              </p>
             )}
-
-            <div>
-              <label className="block font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className={inputCls}
-                placeholder="your@email.com"
-                autoComplete="email"
-              />
-            </div>
-
-            <div>
-              <label className="block font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-                className={inputCls}
-                placeholder="••••••••"
-                autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-brand-gold text-brand-bg font-mono text-[11px] font-bold tracking-[0.2em] uppercase py-3 min-h-[44px] mt-2 hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
-            >
-              {loading
-                ? 'Please wait…'
-                : mode === 'signin'
-                  ? 'Sign In'
-                  : 'Create Account'}
-            </button>
-          </form>
-
-          <p className="mt-6 text-center font-sans text-xs text-brand-muted">
-            {mode === 'signin' ? "Don't have an account?" : 'Already have an account?'}{' '}
-            <button
-              type="button"
-              onClick={() => {
-                setMode(mode === 'signin' ? 'signup' : 'signin')
-                setError('')
-                setMessage('')
-              }}
-              className="text-brand-gold hover:text-brand-gold-hover transition-colors underline underline-offset-2"
-            >
-              {mode === 'signin' ? 'Sign up' : 'Sign in'}
-            </button>
-          </p>
+          </div>
         </div>
       </div>
     </main>

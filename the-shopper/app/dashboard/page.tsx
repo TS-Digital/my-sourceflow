@@ -123,7 +123,7 @@ export default async function DashboardPage() {
             <div className="flex items-center justify-center order-first md:order-last">
               <div className="animate-float">
                 <Image
-                  src="/mascot.png"
+                  src="/mascot.jpg"
                   alt="The Shopper mascot"
                   width={460}
                   height={460}
