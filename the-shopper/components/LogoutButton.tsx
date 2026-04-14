@@ -7,9 +7,9 @@ export default function LogoutButton() {
     <form action={signOut}>
       <button
         type="submit"
-        className="text-xs text-brand-muted hover:text-brand-text transition-colors uppercase tracking-widest"
+        className="font-mono text-[11px] text-brand-muted hover:text-brand-text transition-colors uppercase tracking-widest min-h-[44px] flex items-center"
       >
-        Sign out
+        Sign Out
       </button>
     </form>
   )

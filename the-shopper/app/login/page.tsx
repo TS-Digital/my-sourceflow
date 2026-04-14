@@ -7,8 +7,8 @@ import { useRouter } from 'next/navigation'
 type Mode = 'signin' | 'signup'
 
 const inputCls =
-  'w-full bg-[#080808] border border-[#222] text-[#F0EDE6] px-4 py-3 text-sm ' +
-  'placeholder:text-[#444] focus:outline-none focus:border-[#C49A3C] transition-colors'
+  'w-full bg-brand-bg border border-brand-border text-brand-text font-sans px-4 py-3 text-sm ' +
+  'placeholder:text-brand-muted focus:outline-none focus:border-brand-gold transition-colors min-h-[44px]'
 
 export default function LoginPage() {
   const [mode, setMode] = useState<Mode>('signin')
@@ -56,44 +56,42 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#080808] flex flex-col items-center justify-center px-4">
-      <div className="w-full max-w-[360px]">
+    <main className="min-h-screen bg-brand-bg flex flex-col items-center justify-center px-4 py-12">
+      <div className="w-full max-w-[380px]">
+
         {/* Brand mark */}
-        <div className="text-center mb-12">
-          <h1
-            className="font-display text-xl tracking-[0.35em] uppercase mb-3"
-            style={{ color: '#C49A3C' }}
-          >
-            The Shopper
-          </h1>
-          <div className="h-px bg-[#222] w-24 mx-auto mb-3" />
-          <p className="text-[10px] text-[#767676] tracking-[0.25em] uppercase">
+        <div className="text-center mb-10">
+          <p className="font-mono text-[10px] text-brand-muted uppercase tracking-[0.3em] mb-4">
             Luxury Personal Shopping
           </p>
+          <h1 className="font-display text-5xl text-brand-gold uppercase tracking-wide mb-4">
+            The Shopper
+          </h1>
+          <div className="h-px bg-brand-border w-16 mx-auto" />
         </div>
 
         {/* Card */}
-        <div className="bg-[#101010] border border-[#222] p-8">
-          <h2 className="font-display text-xl text-[#F0EDE6] mb-6">
-            {mode === 'signin' ? 'Welcome back' : 'Create account'}
+        <div className="bg-brand-surface border border-brand-border p-8">
+          <h2 className="font-display text-3xl text-brand-text uppercase mb-6">
+            {mode === 'signin' ? 'Welcome Back' : 'Create Account'}
           </h2>
 
           {message && (
-            <div className="mb-5 p-3 bg-emerald-950/50 border border-emerald-900/50 text-emerald-400 text-xs">
+            <div className="mb-5 p-3 bg-emerald-950/50 border border-emerald-900/50 text-emerald-400 font-sans text-xs">
               {message}
             </div>
           )}
 
           {error && (
-            <div className="mb-5 p-3 bg-red-950/50 border border-red-900/50 text-red-400 text-xs">
+            <div className="mb-5 p-3 bg-red-950/50 border border-red-900/50 text-red-400 font-sans text-xs">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {mode === 'signup' && (
               <div>
-                <label className="block text-[10px] text-[#767676] uppercase tracking-widest mb-2">
+                <label className="block font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-2">
                   Full Name
                 </label>
                 <input
@@ -109,7 +107,7 @@ export default function LoginPage() {
             )}
 
             <div>
-              <label className="block text-[10px] text-[#767676] uppercase tracking-widest mb-2">
+              <label className="block font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-2">
                 Email
               </label>
               <input
@@ -124,7 +122,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-[10px] text-[#767676] uppercase tracking-widest mb-2">
+              <label className="block font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-2">
                 Password
               </label>
               <input
@@ -142,7 +140,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#C49A3C] text-[#080808] text-xs font-semibold tracking-[0.15em] uppercase py-3 mt-2 hover:bg-[#D4AA4C] transition-colors disabled:opacity-50"
+              className="w-full bg-brand-gold text-brand-bg font-mono text-[11px] font-bold tracking-[0.2em] uppercase py-3 min-h-[44px] mt-2 hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
             >
               {loading
                 ? 'Please wait…'
@@ -152,7 +150,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-xs text-[#767676]">
+          <p className="mt-6 text-center font-sans text-xs text-brand-muted">
             {mode === 'signin' ? "Don't have an account?" : 'Already have an account?'}{' '}
             <button
               type="button"
@@ -161,7 +159,7 @@ export default function LoginPage() {
                 setError('')
                 setMessage('')
               }}
-              className="text-[#C49A3C] hover:text-[#D4AA4C] transition-colors underline underline-offset-2"
+              className="text-brand-gold hover:text-brand-gold-hover transition-colors underline underline-offset-2"
             >
               {mode === 'signin' ? 'Sign up' : 'Sign in'}
             </button>

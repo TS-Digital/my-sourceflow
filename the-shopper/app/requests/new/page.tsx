@@ -14,13 +14,15 @@ export default async function NewRequestPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-2xl px-6 py-12">
+      <main className="pt-16 max-w-2xl mx-auto px-4 sm:px-6 py-12">
         <div className="mb-8">
-          <p className="text-[10px] text-brand-muted uppercase tracking-widest mb-1.5">
+          <p className="font-mono text-[10px] text-brand-gold uppercase tracking-[0.3em] mb-3">
             Concierge Service
           </p>
-          <h1 className="font-display text-3xl text-brand-text">New Shopping Request</h1>
-          <p className="text-sm text-brand-muted mt-2">
+          <h1 className="font-display text-4xl sm:text-5xl text-brand-text uppercase">
+            New Request
+          </h1>
+          <p className="font-sans text-sm text-brand-muted mt-3 leading-relaxed">
             Describe the item you&apos;re looking for. Our team will source it for you.
           </p>
         </div>

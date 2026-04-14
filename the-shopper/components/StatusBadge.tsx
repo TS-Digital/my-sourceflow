@@ -9,7 +9,7 @@ export default function StatusBadge({ status }: { status: string }) {
   const cls = STYLES[status] ?? 'bg-zinc-900 text-zinc-400 border border-zinc-800'
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 text-[10px] font-semibold tracking-widest uppercase ${cls}`}
+      className={`inline-flex items-center px-2.5 py-1 font-mono text-[9px] tracking-widest uppercase whitespace-nowrap ${cls}`}
     >
       {status}
     </span>

@@ -1,16 +1,24 @@
 import type { Metadata } from 'next'
-import { Inter, Playfair_Display } from 'next/font/google'
+import { Bebas_Neue, Space_Mono, DM_Sans } from 'next/font/google'
 import './globals.css'
 
-const inter = Inter({
+const bebasNeue = Bebas_Neue({
+  weight: '400',
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-bebas',
   display: 'swap',
 })
 
-const playfair = Playfair_Display({
+const spaceMono = Space_Mono({
+  weight: ['400', '700'],
   subsets: ['latin'],
-  variable: '--font-playfair',
+  variable: '--font-space-mono',
+  display: 'swap',
+})
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-dm-sans',
   display: 'swap',
 })
 
@@ -21,7 +29,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html
+      lang="en"
+      className={`${bebasNeue.variable} ${spaceMono.variable} ${dmSans.variable}`}
+    >
       <body>{children}</body>
     </html>
   )

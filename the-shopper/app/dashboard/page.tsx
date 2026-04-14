@@ -1,8 +1,12 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import Navbar from '@/components/Navbar'
 import StatusBadge from '@/components/StatusBadge'
+
+const TICKER_SEGMENT =
+  'THE SHOPPER\u2003\u2736\u2003YOU WANT IT YOU GOT IT\u2003\u2736\u2003LUXURY PERSONAL SHOPPING\u2003\u2736\u2003'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -18,7 +22,6 @@ export default async function DashboardPage() {
     .eq('id', user.id)
     .single()
 
-  // Admins belong in /admin
   if (profile?.role === 'admin') redirect('/admin')
 
   const { data: requests } = await supabase
@@ -34,7 +37,9 @@ export default async function DashboardPage() {
     inProgress: all.filter(
       (r) => (r.statuses as { name: string } | null)?.name === 'In Progress'
     ).length,
-    completed: all.filter((r) => (r.statuses as { name: string } | null)?.name === 'Completed').length,
+    completed: all.filter(
+      (r) => (r.statuses as { name: string } | null)?.name === 'Completed'
+    ).length,
   }
 
   const firstName = profile?.full_name?.split(' ')[0] || user.email?.split('@')[0] || 'there'
@@ -42,77 +47,151 @@ export default async function DashboardPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-6xl px-6 py-12">
-        {/* Header */}
-        <div className="flex items-start justify-between mb-10">
-          <div>
-            <p className="text-[10px] text-brand-muted uppercase tracking-widest mb-1.5">
-              Personal Shopping
-            </p>
-            <h1 className="font-display text-3xl text-brand-text">Welcome back, {firstName}</h1>
+
+      <div className="pt-16">
+        {/* Gold scrolling ticker */}
+        <div className="bg-brand-gold overflow-hidden py-2.5">
+          <div className="flex animate-ticker" style={{ width: 'max-content' }}>
+            {/* Two identical copies — animation translates by -50% for seamless loop */}
+            {[0, 1].map((copy) => (
+              <span
+                key={copy}
+                className="font-mono text-[10px] sm:text-[11px] text-brand-bg tracking-[0.18em] uppercase whitespace-nowrap"
+              >
+                {TICKER_SEGMENT.repeat(6)}
+              </span>
+            ))}
           </div>
-          <Link
-            href="/requests/new"
-            className="bg-brand-gold text-brand-bg text-[10px] font-semibold tracking-widest uppercase px-6 py-3 hover:bg-brand-gold-hover transition-colors"
-          >
-            New Request
-          </Link>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-4 gap-4 mb-10">
-          {[
-            { label: 'Total', value: stats.total },
-            { label: 'New', value: stats.new },
-            { label: 'In Progress', value: stats.inProgress },
-            { label: 'Completed', value: stats.completed },
-          ].map((s) => (
-            <div key={s.label} className="bg-brand-surface border border-brand-border p-6">
-              <p className="text-[10px] text-brand-muted uppercase tracking-widest mb-3">
-                {s.label}
+        {/* Hero */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-10 md:pt-16 md:pb-14">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
+
+            {/* Left: text + stats + CTAs */}
+            <div>
+              <p className="font-mono text-[10px] text-brand-gold uppercase tracking-[0.3em] mb-4">
+                Personal Shopping Concierge
               </p>
-              <p className="font-display text-4xl text-brand-text">{s.value}</p>
-            </div>
-          ))}
-        </div>
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-brand-text uppercase leading-none mb-4">
+                Welcome Back
+                <br />
+                <span className="text-brand-gold">{firstName}</span>
+              </h1>
+              <p className="font-sans text-brand-muted text-base leading-relaxed mb-8 max-w-sm">
+                Your luxury concierge is ready. Browse your orders below or place a new request.
+              </p>
 
-        {/* Requests list */}
-        <div className="bg-brand-surface border border-brand-border">
-          <div className="px-6 py-4 border-b border-brand-border">
-            <h2 className="font-display text-lg text-brand-text">Your Requests</h2>
+              {/* Stats — 2×2 on mobile, 4 cols on desktop */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+                {[
+                  { label: 'Total', value: stats.total },
+                  { label: 'New', value: stats.new },
+                  { label: 'In Progress', value: stats.inProgress },
+                  { label: 'Done', value: stats.completed },
+                ].map((s) => (
+                  <div
+                    key={s.label}
+                    className="bg-brand-surface border border-brand-border p-4 min-w-0"
+                  >
+                    <p className="font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-2 whitespace-normal leading-tight">
+                      {s.label}
+                    </p>
+                    <p className="font-display text-4xl text-brand-text">{s.value}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/requests/new"
+                  className="inline-flex items-center justify-center bg-brand-gold text-brand-bg font-mono text-[11px] font-bold tracking-[0.15em] uppercase px-6 min-h-[44px] hover:bg-brand-gold-hover transition-colors"
+                >
+                  New Request
+                </Link>
+                <a
+                  href="#requests"
+                  className="inline-flex items-center justify-center border border-brand-border text-brand-text font-mono text-[11px] tracking-[0.15em] uppercase px-6 min-h-[44px] hover:border-brand-gold hover:text-brand-gold transition-colors"
+                >
+                  View All Orders
+                </a>
+              </div>
+            </div>
+
+            {/* Right: mascot — below text on mobile, right col on desktop */}
+            <div className="flex items-center justify-center order-first md:order-last">
+              <div className="animate-float">
+                <Image
+                  src="/mascot.png"
+                  alt="The Shopper mascot"
+                  width={460}
+                  height={460}
+                  className="w-full max-w-[220px] sm:max-w-[280px] md:max-w-[380px] lg:max-w-[460px] object-contain select-none"
+                  priority
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Request cards */}
+        <section id="requests" className="max-w-7xl mx-auto px-4 sm:px-6 pb-16">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="font-display text-2xl sm:text-3xl text-brand-text uppercase tracking-wide">
+              Your Requests
+            </h2>
           </div>
 
           {all.length === 0 ? (
-            <div className="px-6 py-16 text-center">
-              <p className="text-sm text-brand-muted mb-4">No requests yet.</p>
+            <div className="bg-brand-surface border border-brand-border px-6 py-16 text-center">
+              <p className="font-sans text-brand-muted mb-4">No requests yet.</p>
               <Link
                 href="/requests/new"
-                className="text-xs text-brand-gold hover:text-brand-gold-hover uppercase tracking-widest transition-colors"
+                className="font-mono text-xs text-brand-gold hover:text-brand-gold-hover uppercase tracking-widest transition-colors"
               >
                 Place your first request →
               </Link>
             </div>
           ) : (
-            <div className="divide-y divide-brand-border">
+            <div className="flex flex-col gap-2">
               {all.map((req) => {
                 const status = (req.statuses as { name: string } | null)?.name ?? 'New'
                 return (
                   <Link
                     key={req.id}
                     href={`/requests/${req.id}`}
-                    className="flex items-center justify-between px-6 py-4 hover:bg-brand-elevated transition-colors group"
+                    className="bg-brand-surface border border-brand-border px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 hover:border-brand-gold/40 hover:bg-brand-elevated transition-all group"
                   >
-                    <div className="min-w-0">
-                      <p className="text-sm text-brand-text font-medium group-hover:text-brand-gold transition-colors truncate">
+                    <div className="min-w-0 flex-1">
+                      {req.brand && (
+                        <p className="font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-1">
+                          {req.brand}
+                        </p>
+                      )}
+                      <p className="font-sans text-brand-text font-medium group-hover:text-brand-gold transition-colors truncate">
                         {req.item_name}
                       </p>
-                      {req.brand && (
-                        <p className="text-xs text-brand-muted mt-0.5">{req.brand}</p>
-                      )}
+                      <p className="font-mono text-[10px] text-brand-muted mt-1 sm:hidden uppercase tracking-wide">
+                        {new Date(req.created_at).toLocaleDateString('en-GB', {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                        })}
+                      </p>
                     </div>
-                    <div className="flex items-center gap-4 ml-4 flex-shrink-0">
+                    <div className="flex items-center gap-3 sm:flex-shrink-0">
+                      <p className="font-mono text-[10px] text-brand-muted uppercase tracking-wide hidden sm:block">
+                        {new Date(req.created_at).toLocaleDateString('en-GB', {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                        })}
+                      </p>
                       {req.budget_gbp != null && (
-                        <span className="text-xs text-brand-muted">£{req.budget_gbp}</span>
+                        <span className="font-mono text-xs text-brand-muted">
+                          £{req.budget_gbp}
+                        </span>
                       )}
                       <StatusBadge status={status} />
                     </div>
@@ -121,8 +200,8 @@ export default async function DashboardPage() {
               })}
             </div>
           )}
-        </div>
-      </main>
+        </section>
+      </div>
     </>
   )
 }

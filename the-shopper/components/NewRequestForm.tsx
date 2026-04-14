@@ -5,10 +5,10 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
 const inputCls =
-  'w-full bg-brand-bg border border-brand-border text-brand-text px-4 py-3 text-sm ' +
-  'placeholder:text-brand-muted focus:outline-none focus:border-brand-gold transition-colors'
+  'w-full bg-brand-bg border border-brand-border text-brand-text font-sans px-4 py-3 text-sm ' +
+  'placeholder:text-brand-muted focus:outline-none focus:border-brand-gold transition-colors min-h-[44px]'
 
-const labelCls = 'block text-[10px] text-brand-muted uppercase tracking-widest mb-2'
+const labelCls = 'block font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-2'
 
 export default function NewRequestForm() {
   const [loading, setLoading] = useState(false)
@@ -35,7 +35,7 @@ export default function NewRequestForm() {
 
     const { error: insertError } = await supabase.from('requests').insert({
       client_id: user.id,
-      status_id: 1, // New
+      status_id: 1,
       item_name: data.get('item_name') as string,
       brand: (data.get('brand') as string) || null,
       budget_gbp: data.get('budget_gbp') ? Number(data.get('budget_gbp')) : null,
@@ -55,15 +55,18 @@ export default function NewRequestForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-brand-surface border border-brand-border p-8 space-y-6">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-brand-surface border border-brand-border p-6 sm:p-8 space-y-6"
+    >
       {error && (
-        <div className="p-3 bg-red-950/50 border border-red-900/50 text-red-400 text-sm">
+        <div className="p-3 bg-red-950/50 border border-red-900/50 text-red-400 font-sans text-sm">
           {error}
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-6">
-        <div className="col-span-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div className="sm:col-span-2">
           <label className={labelCls}>
             Item Name <span className="text-brand-gold">*</span>
           </label>
@@ -114,7 +117,7 @@ export default function NewRequestForm() {
           />
         </div>
 
-        <div className="col-span-2">
+        <div className="sm:col-span-2">
           <label className={labelCls}>Additional Notes</label>
           <textarea
             name="notes"
@@ -125,17 +128,17 @@ export default function NewRequestForm() {
         </div>
       </div>
 
-      <div className="flex items-center gap-6 pt-2">
+      <div className="flex flex-wrap items-center gap-4 pt-2">
         <button
           type="submit"
           disabled={loading}
-          className="bg-brand-gold text-brand-bg text-xs font-semibold tracking-widest uppercase px-8 py-3 hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
+          className="bg-brand-gold text-brand-bg font-mono text-[11px] font-bold tracking-widest uppercase px-8 min-h-[44px] hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
         >
           {loading ? 'Submitting…' : 'Submit Request'}
         </button>
         <a
           href="/dashboard"
-          className="text-xs text-brand-muted hover:text-brand-text uppercase tracking-widest transition-colors"
+          className="font-mono text-xs text-brand-muted hover:text-brand-text uppercase tracking-widest transition-colors min-h-[44px] flex items-center"
         >
           Cancel
         </a>

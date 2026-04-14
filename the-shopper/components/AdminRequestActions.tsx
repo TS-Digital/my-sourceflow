@@ -73,14 +73,16 @@ export default function AdminRequestActions({
   }
 
   const inputCls =
-    'w-full bg-brand-bg border border-brand-border text-brand-text px-3 py-2 text-sm ' +
+    'w-full bg-brand-bg border border-brand-border text-brand-text font-sans px-3 py-2.5 text-sm ' +
     'focus:outline-none focus:border-brand-gold transition-colors'
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       {/* Timeline */}
       <div className="bg-brand-surface border border-brand-border p-5">
-        <p className="text-[10px] text-brand-muted uppercase tracking-widest mb-4">Progress</p>
+        <p className="font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-4">
+          Progress
+        </p>
         <div className="space-y-3">
           {statusTimeline.map((step, i) => {
             const active = i <= statusIdx
@@ -88,7 +90,7 @@ export default function AdminRequestActions({
             return (
               <div key={step} className="flex items-center gap-3">
                 <div
-                  className={`w-1.5 h-1.5 rounded-full flex-shrink-0 transition-colors ${
+                  className={`w-2 h-2 rounded-full flex-shrink-0 transition-colors ${
                     current
                       ? 'bg-brand-gold ring-2 ring-brand-gold/20'
                       : active
@@ -97,7 +99,7 @@ export default function AdminRequestActions({
                   }`}
                 />
                 <span
-                  className={`text-xs transition-colors ${
+                  className={`font-mono text-xs transition-colors ${
                     active ? 'text-brand-text' : 'text-brand-muted'
                   }`}
                 >
@@ -111,7 +113,9 @@ export default function AdminRequestActions({
 
       {/* Update status */}
       <div className="bg-brand-surface border border-brand-border p-5">
-        <p className="text-[10px] text-brand-muted uppercase tracking-widest mb-3">Update Status</p>
+        <p className="font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-3">
+          Update Status
+        </p>
         <select
           value={selectedStatusId}
           onChange={(e) => setSelectedStatusId(Number(e.target.value))}
@@ -126,18 +130,20 @@ export default function AdminRequestActions({
         <button
           onClick={saveStatus}
           disabled={isPending}
-          className="w-full bg-brand-gold text-brand-bg text-[10px] font-semibold tracking-widest uppercase py-2.5 hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
+          className="w-full bg-brand-gold text-brand-bg font-mono text-[10px] font-bold tracking-widest uppercase py-3 min-h-[44px] hover:bg-brand-gold-hover transition-colors disabled:opacity-50"
         >
           Save Status
         </button>
         {statusMsg && (
-          <p className="mt-2 text-[10px] text-brand-muted">{statusMsg}</p>
+          <p className="mt-2 font-mono text-[10px] text-brand-muted">{statusMsg}</p>
         )}
       </div>
 
-      {/* Add concierge note */}
+      {/* Add note */}
       <div className="bg-brand-surface border border-brand-border p-5">
-        <p className="text-[10px] text-brand-muted uppercase tracking-widest mb-3">Concierge Note</p>
+        <p className="font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-3">
+          Concierge Note
+        </p>
         <textarea
           value={noteText}
           onChange={(e) => setNoteText(e.target.value)}
@@ -148,12 +154,12 @@ export default function AdminRequestActions({
         <button
           onClick={addNote}
           disabled={isPending || !noteText.trim()}
-          className="w-full border border-brand-border text-brand-text text-[10px] font-semibold tracking-widest uppercase py-2.5 hover:border-brand-gold hover:text-brand-gold transition-colors disabled:opacity-40"
+          className="w-full border border-brand-border text-brand-text font-mono text-[10px] font-bold tracking-widest uppercase py-3 min-h-[44px] hover:border-brand-gold hover:text-brand-gold transition-colors disabled:opacity-40"
         >
           Add Note
         </button>
         {noteMsg && (
-          <p className="mt-2 text-[10px] text-brand-muted">{noteMsg}</p>
+          <p className="mt-2 font-mono text-[10px] text-brand-muted">{noteMsg}</p>
         )}
       </div>
     </div>

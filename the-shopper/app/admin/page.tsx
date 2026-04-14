@@ -45,26 +45,28 @@ export default async function AdminPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-6xl px-6 py-12">
+      <main className="pt-16 max-w-7xl mx-auto px-4 sm:px-6 py-10">
         {/* Header */}
-        <div className="mb-10">
-          <p className="text-[10px] text-brand-muted uppercase tracking-widest mb-1.5">
+        <div className="mb-8">
+          <p className="font-mono text-[10px] text-brand-gold uppercase tracking-[0.3em] mb-3">
             Concierge View
           </p>
-          <h1 className="font-display text-3xl text-brand-text">Request Queue</h1>
+          <h1 className="font-display text-4xl sm:text-5xl text-brand-text uppercase">
+            Request Queue
+          </h1>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-5 gap-4 mb-10">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
           {[
             { label: 'Total', value: stats.total },
             { label: 'New', value: stats.new },
             { label: 'In Progress', value: stats.inProgress },
             { label: 'Sourced', value: stats.sourced },
-            { label: 'Completed', value: stats.completed },
+            { label: 'Done', value: stats.completed },
           ].map((s) => (
-            <div key={s.label} className="bg-brand-surface border border-brand-border p-5">
-              <p className="text-[10px] text-brand-muted uppercase tracking-widest mb-2">
+            <div key={s.label} className="bg-brand-surface border border-brand-border p-4 min-w-0">
+              <p className="font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-2 whitespace-normal leading-tight">
                 {s.label}
               </p>
               <p className="font-display text-3xl text-brand-text">{s.value}</p>
@@ -72,70 +74,118 @@ export default async function AdminPage() {
           ))}
         </div>
 
-        {/* Table */}
+        {/* Request list */}
         <div className="bg-brand-surface border border-brand-border">
           <div className="px-6 py-4 border-b border-brand-border">
-            <h2 className="font-display text-lg text-brand-text">All Requests</h2>
+            <h2 className="font-display text-xl text-brand-text uppercase">All Requests</h2>
           </div>
 
           {all.length === 0 ? (
-            <div className="px-6 py-16 text-center text-sm text-brand-muted">
+            <div className="px-6 py-16 text-center font-sans text-sm text-brand-muted">
               No requests in the queue.
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-brand-border">
-                    {['Client', 'Item', 'Budget', 'Status', 'Date', ''].map((h) => (
-                      <th
-                        key={h}
-                        className="text-left px-6 py-3 text-[10px] text-brand-muted uppercase tracking-widest font-medium"
-                      >
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-brand-border">
-                  {all.map((req) => {
-                    const status = statusOf(req)
-                    const client = (req.profiles as ProfileRow)?.full_name ?? '—'
-                    return (
-                      <tr key={req.id} className="hover:bg-brand-elevated transition-colors">
-                        <td className="px-6 py-4 text-sm text-brand-text">{client}</td>
-                        <td className="px-6 py-4">
-                          <p className="text-sm text-brand-text">{req.item_name}</p>
+            <>
+              {/* Desktop table */}
+              <div className="hidden sm:block overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-brand-border">
+                      {['Client', 'Item', 'Budget', 'Status', 'Date', ''].map((h) => (
+                        <th
+                          key={h}
+                          className="text-left px-6 py-3 font-mono text-[10px] text-brand-muted uppercase tracking-widest font-medium"
+                        >
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-brand-border">
+                    {all.map((req) => {
+                      const status = statusOf(req)
+                      const client = (req.profiles as ProfileRow)?.full_name ?? '—'
+                      return (
+                        <tr key={req.id} className="hover:bg-brand-elevated transition-colors">
+                          <td className="px-6 py-4 font-sans text-sm text-brand-text">{client}</td>
+                          <td className="px-6 py-4">
+                            <p className="font-sans text-sm text-brand-text">{req.item_name}</p>
+                            {req.brand && (
+                              <p className="font-mono text-[10px] text-brand-muted mt-0.5 uppercase tracking-wide">
+                                {req.brand}
+                              </p>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 font-mono text-sm text-brand-muted">
+                            {req.budget_gbp != null ? `£${req.budget_gbp}` : '—'}
+                          </td>
+                          <td className="px-6 py-4">
+                            <StatusBadge status={status} />
+                          </td>
+                          <td className="px-6 py-4 font-mono text-xs text-brand-muted whitespace-nowrap">
+                            {new Date(req.created_at).toLocaleDateString('en-GB', {
+                              day: 'numeric',
+                              month: 'short',
+                            })}
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <Link
+                              href={`/admin/${req.id}`}
+                              className="font-mono text-[10px] text-brand-gold hover:text-brand-gold-hover uppercase tracking-widest transition-colors"
+                            >
+                              Open →
+                            </Link>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile cards */}
+              <div className="sm:hidden divide-y divide-brand-border">
+                {all.map((req) => {
+                  const status = statusOf(req)
+                  const client = (req.profiles as ProfileRow)?.full_name ?? '—'
+                  return (
+                    <Link
+                      key={req.id}
+                      href={`/admin/${req.id}`}
+                      className="flex flex-col gap-2 px-5 py-4 hover:bg-brand-elevated transition-colors"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <p className="font-sans text-sm text-brand-text font-medium truncate">
+                            {req.item_name}
+                          </p>
                           {req.brand && (
-                            <p className="text-xs text-brand-muted mt-0.5">{req.brand}</p>
+                            <p className="font-mono text-[10px] text-brand-muted mt-0.5 uppercase tracking-wide">
+                              {req.brand}
+                            </p>
                           )}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-brand-muted">
-                          {req.budget_gbp != null ? `£${req.budget_gbp}` : '—'}
-                        </td>
-                        <td className="px-6 py-4">
-                          <StatusBadge status={status} />
-                        </td>
-                        <td className="px-6 py-4 text-xs text-brand-muted whitespace-nowrap">
+                        </div>
+                        <StatusBadge status={status} />
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono text-[10px] text-brand-muted">{client}</span>
+                        {req.budget_gbp != null && (
+                          <span className="font-mono text-[10px] text-brand-muted">
+                            £{req.budget_gbp}
+                          </span>
+                        )}
+                        <span className="font-mono text-[10px] text-brand-muted ml-auto">
                           {new Date(req.created_at).toLocaleDateString('en-GB', {
                             day: 'numeric',
                             month: 'short',
                           })}
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <Link
-                            href={`/admin/${req.id}`}
-                            className="text-[10px] text-brand-gold hover:text-brand-gold-hover uppercase tracking-widest transition-colors"
-                          >
-                            Open →
-                          </Link>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
+                        </span>
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
+            </>
           )}
         </div>
       </main>

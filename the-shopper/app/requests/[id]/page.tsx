@@ -41,7 +41,6 @@ export default async function RequestDetailPage({
 
   if (!request) notFound()
 
-  // Clients may only view their own requests
   if (profile?.role !== 'admin' && request.client_id !== user.id) notFound()
 
   const { data: notes } = await supabase
@@ -58,35 +57,37 @@ export default async function RequestDetailPage({
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-4xl px-6 py-12">
+      <main className="pt-16 max-w-5xl mx-auto px-4 sm:px-6 py-10">
         {/* Back */}
         <Link
           href={backHref}
-          className="inline-flex items-center gap-2 text-[10px] text-brand-muted hover:text-brand-text uppercase tracking-widest mb-8 transition-colors"
+          className="inline-flex items-center gap-2 font-mono text-[10px] text-brand-muted hover:text-brand-text uppercase tracking-widest mb-8 transition-colors"
         >
           ← Back
         </Link>
 
         {/* Header */}
-        <div className="flex items-start justify-between mb-8 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
           <div>
-            <p className="text-[10px] text-brand-muted uppercase tracking-widest mb-1.5">
+            <p className="font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-2">
               Request #{shortId}
             </p>
-            <h1 className="font-display text-3xl text-brand-text">{request.item_name}</h1>
+            <h1 className="font-display text-4xl sm:text-5xl text-brand-text uppercase">
+              {request.item_name}
+            </h1>
           </div>
-          <div className="flex-shrink-0 pt-1">
+          <div className="sm:flex-shrink-0 sm:pt-1">
             <StatusBadge status={statusName} />
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-6">
-          {/* Main */}
-          <div className="col-span-2 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Main — 2/3 width on desktop */}
+          <div className="md:col-span-2 space-y-5">
             {/* Details */}
             <div className="bg-brand-surface border border-brand-border">
               <div className="px-6 py-4 border-b border-brand-border">
-                <h2 className="font-display text-lg text-brand-text">Details</h2>
+                <h2 className="font-display text-xl text-brand-text uppercase">Details</h2>
               </div>
               <div className="p-6 grid grid-cols-2 gap-x-6 gap-y-5">
                 {[
@@ -98,21 +99,23 @@ export default async function RequestDetailPage({
                     value: request.budget_gbp != null ? `£${request.budget_gbp}` : null,
                   },
                   { label: 'Submitted', value: formatDate(request.created_at) },
-                  { label: 'Last updated', value: formatDate(request.updated_at) },
+                  { label: 'Updated', value: formatDate(request.updated_at) },
                 ].map(({ label, value }) => (
                   <div key={label}>
-                    <p className="text-[10px] text-brand-muted uppercase tracking-widest mb-1">
+                    <p className="font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-1">
                       {label}
                     </p>
-                    <p className="text-sm text-brand-text">{value || '—'}</p>
+                    <p className="font-sans text-sm text-brand-text">{value || '—'}</p>
                   </div>
                 ))}
                 {request.notes && (
                   <div className="col-span-2">
-                    <p className="text-[10px] text-brand-muted uppercase tracking-widest mb-1">
+                    <p className="font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-1">
                       Notes
                     </p>
-                    <p className="text-sm text-brand-text leading-relaxed">{request.notes}</p>
+                    <p className="font-sans text-sm text-brand-text leading-relaxed">
+                      {request.notes}
+                    </p>
                   </div>
                 )}
               </div>
@@ -121,11 +124,13 @@ export default async function RequestDetailPage({
             {/* Concierge updates */}
             <div className="bg-brand-surface border border-brand-border">
               <div className="px-6 py-4 border-b border-brand-border">
-                <h2 className="font-display text-lg text-brand-text">Concierge Updates</h2>
+                <h2 className="font-display text-xl text-brand-text uppercase">
+                  Concierge Updates
+                </h2>
               </div>
               <div className="p-6">
                 {!notes?.length ? (
-                  <p className="text-sm text-brand-muted">
+                  <p className="font-sans text-sm text-brand-muted">
                     No updates yet. Our team will be in touch.
                   </p>
                 ) : (
@@ -134,11 +139,11 @@ export default async function RequestDetailPage({
                       const admin = note.profiles as { full_name: string } | null
                       return (
                         <div key={note.id} className="border-l-2 border-brand-gold pl-4">
-                          <p className="text-[10px] text-brand-muted mb-1.5">
+                          <p className="font-mono text-[10px] text-brand-muted mb-1.5">
                             {admin?.full_name ?? 'The Shopper team'} ·{' '}
                             {formatDate(note.created_at)}
                           </p>
-                          <p className="text-sm text-brand-text leading-relaxed">
+                          <p className="font-sans text-sm text-brand-text leading-relaxed">
                             {note.note_text}
                           </p>
                         </div>
@@ -153,7 +158,7 @@ export default async function RequestDetailPage({
           {/* Sidebar: timeline */}
           <div>
             <div className="bg-brand-surface border border-brand-border p-6">
-              <p className="text-[10px] text-brand-muted uppercase tracking-widest mb-4">
+              <p className="font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-4">
                 Progress
               </p>
               <div className="space-y-3">
@@ -163,7 +168,7 @@ export default async function RequestDetailPage({
                   return (
                     <div key={step} className="flex items-center gap-3">
                       <div
-                        className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                        className={`w-2 h-2 rounded-full flex-shrink-0 ${
                           current
                             ? 'bg-brand-gold ring-2 ring-brand-gold/20'
                             : active
@@ -172,7 +177,9 @@ export default async function RequestDetailPage({
                         }`}
                       />
                       <span
-                        className={`text-xs ${active ? 'text-brand-text' : 'text-brand-muted'}`}
+                        className={`font-mono text-xs ${
+                          active ? 'text-brand-text' : 'text-brand-muted'
+                        }`}
                       >
                         {step}
                       </span>

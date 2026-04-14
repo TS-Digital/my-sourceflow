@@ -10,24 +10,39 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          bg: '#080808',
-          surface: '#101010',
-          elevated: '#181818',
-          border: '#222222',
-          'border-strong': '#333333',
+          bg: '#060608',
+          surface: '#0E0E10',
+          elevated: '#141416',
+          border: '#1E1E22',
+          'border-strong': '#2A2A30',
           text: '#F0EDE6',
-          muted: '#767676',
-          gold: '#C49A3C',
-          'gold-hover': '#D4AA4C',
+          muted: '#6B6B72',
+          gold: '#C9A84C',
+          'gold-hover': '#D4B85C',
         },
       },
       fontFamily: {
-        display: ['var(--font-playfair)', 'Georgia', 'serif'],
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-bebas)', 'Impact', 'sans-serif'],
+        mono: ['var(--font-space-mono)', 'ui-monospace', 'monospace'],
+        sans: ['var(--font-dm-sans)', 'system-ui', 'sans-serif'],
       },
       letterSpacing: {
         brand: '0.25em',
         widest: '0.3em',
+      },
+      keyframes: {
+        ticker: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-50%)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-14px)' },
+        },
+      },
+      animation: {
+        ticker: 'ticker 28s linear infinite',
+        float: 'float 4s ease-in-out infinite',
       },
     },
   },
