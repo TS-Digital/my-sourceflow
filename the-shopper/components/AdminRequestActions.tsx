@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import type { Status } from '@/lib/types'
 
+
 interface Props {
   requestId: string
   currentStatusId: number
@@ -33,13 +34,14 @@ export default function AdminRequestActions({
   const saveStatus = () => {
     startTransition(async () => {
       setStatusMsg('')
-      const { error } = await supabase
-        .from('requests')
-        .update({ status_id: selectedStatusId })
-        .eq('id', requestId)
-
-      if (error) {
-        setStatusMsg(error.message)
+      const res = await fetch(`/api/requests/${requestId}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status_id: selectedStatusId }),
+      })
+      const json = await res.json()
+      if (!res.ok) {
+        setStatusMsg(json.error ?? 'Something went wrong.')
         return
       }
       setStatusMsg('Saved.')

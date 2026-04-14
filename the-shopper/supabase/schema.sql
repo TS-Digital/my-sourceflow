@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS public.requests (
   budget_gbp NUMERIC(10, 2),
   size       TEXT,
   colour     TEXT,
-  notes      TEXT,
+  notes         TEXT,
+  phone_number  TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CONSTRAINT fk_requests_client FOREIGN KEY (client_id)

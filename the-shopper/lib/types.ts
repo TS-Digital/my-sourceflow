@@ -23,6 +23,7 @@ export interface Request {
   size: string | null
   colour: string | null
   notes: string | null
+  phone_number: string | null
   created_at: string
   updated_at: string
 }

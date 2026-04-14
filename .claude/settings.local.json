@@ -4,7 +4,8 @@
       "Bash(cp mascot.png mascot-landing.png)",
       "Bash(rm -f \"mascot-admin.png.png\" \"mascot-landing.png.png\")",
       "Bash(find:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(npm install:*)"
     ]
   }
 }

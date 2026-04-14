@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
 const inputCls =
@@ -14,7 +13,6 @@ export default function NewRequestForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
-  const supabase = createClient()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -24,28 +22,24 @@ export default function NewRequestForm() {
     const form = e.currentTarget
     const data = new FormData(form)
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) {
-      router.push('/login')
-      return
-    }
-
-    const { error: insertError } = await supabase.from('requests').insert({
-      client_id: user.id,
-      status_id: 1,
-      item_name: data.get('item_name') as string,
-      brand: (data.get('brand') as string) || null,
-      budget_gbp: data.get('budget_gbp') ? Number(data.get('budget_gbp')) : null,
-      size: (data.get('size') as string) || null,
-      colour: (data.get('colour') as string) || null,
-      notes: (data.get('notes') as string) || null,
+    const res = await fetch('/api/requests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        item_name: data.get('item_name') as string,
+        brand: (data.get('brand') as string) || null,
+        budget_gbp: data.get('budget_gbp') ? Number(data.get('budget_gbp')) : null,
+        size: (data.get('size') as string) || null,
+        colour: (data.get('colour') as string) || null,
+        notes: (data.get('notes') as string) || null,
+        phone_number: (data.get('phone_number') as string) || null,
+      }),
     })
 
-    if (insertError) {
-      setError(insertError.message)
+    const json = await res.json()
+
+    if (!res.ok) {
+      setError(json.error ?? 'Something went wrong.')
       setLoading(false)
       return
     }
@@ -114,6 +108,16 @@ export default function NewRequestForm() {
             name="colour"
             className={inputCls}
             placeholder="e.g. Black, University Red"
+          />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label className={labelCls}>Phone Number</label>
+          <input
+            name="phone_number"
+            type="tel"
+            className={inputCls}
+            placeholder="e.g. +44 7700 900000"
           />
         </div>
 
