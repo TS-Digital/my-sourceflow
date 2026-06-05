@@ -33,12 +33,12 @@ export default async function DashboardPage() {
   const all = requests ?? []
   const stats = {
     total: all.length,
-    new: all.filter((r) => (r.statuses as { name: string } | null)?.name === 'New').length,
+    new: all.filter((r) => ((Array.isArray(r.statuses) ? r.statuses[0] : r.statuses) as { name: string } | null)?.name === 'New').length,
     inProgress: all.filter(
-      (r) => (r.statuses as { name: string } | null)?.name === 'In Progress'
+      (r) => ((Array.isArray(r.statuses) ? r.statuses[0] : r.statuses) as { name: string } | null)?.name === 'In Progress'
     ).length,
     completed: all.filter(
-      (r) => (r.statuses as { name: string } | null)?.name === 'Completed'
+      (r) => ((Array.isArray(r.statuses) ? r.statuses[0] : r.statuses) as { name: string } | null)?.name === 'Completed'
     ).length,
   }
 
@@ -156,7 +156,7 @@ export default async function DashboardPage() {
           ) : (
             <div className="flex flex-col gap-2">
               {all.map((req) => {
-                const status = (req.statuses as { name: string } | null)?.name ?? 'New'
+                const status = ((Array.isArray(req.statuses) ? req.statuses[0] : req.statuses) as { name: string } | null)?.name ?? 'New'
                 return (
                   <Link
                     key={req.id}

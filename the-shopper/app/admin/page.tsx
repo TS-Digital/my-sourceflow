@@ -36,8 +36,8 @@ export default async function AdminPage() {
   const all = requests ?? []
   const allStatuses = statuses ?? []
 
-  const statusOf = (r: (typeof all)[0]) => (r.statuses as StatusRow)?.name ?? 'New'
-  const statusIdOf = (r: (typeof all)[0]) => (r.statuses as StatusRow)?.id ?? 1
+  const statusOf = (r: (typeof all)[0]) => ((Array.isArray(r.statuses) ? r.statuses[0] : r.statuses) as StatusRow)?.name ?? 'New'
+  const statusIdOf = (r: (typeof all)[0]) => ((Array.isArray(r.statuses) ? r.statuses[0] : r.statuses) as StatusRow)?.id ?? 1
 
   const revenue = all.reduce((sum, r) => sum + (r.budget_gbp ?? 0), 0)
 
@@ -57,7 +57,7 @@ export default async function AdminPage() {
     created_at: r.created_at,
     status_id: statusIdOf(r),
     status_name: statusOf(r),
-    client_name: (r.profiles as ProfileRow)?.full_name ?? '—',
+    client_name: (Array.isArray(r.profiles) ? r.profiles[0] : r.profiles as ProfileRow)?.full_name ?? '—',
   }))
 
   return (

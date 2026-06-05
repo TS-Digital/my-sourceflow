@@ -136,7 +136,7 @@ export default async function RequestDetailPage({
                 ) : (
                   <div className="space-y-5">
                     {notes.map((note) => {
-                      const admin = note.profiles as { full_name: string } | null
+                      const admin = (Array.isArray(note.profiles) ? note.profiles[0] : note.profiles) as { full_name: string } | null
                       return (
                         <div key={note.id} className="border-l-2 border-brand-gold pl-4">
                           <p className="font-mono text-[10px] text-brand-muted mb-1.5">
