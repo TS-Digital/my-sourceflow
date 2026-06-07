@@ -48,44 +48,24 @@ export async function POST(request: NextRequest) {
     .eq('id', user.id)
     .single()
 
-  // Send notification to admin — fire and forget, don't block the response
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? ''
-  const fromEmail = process.env.RESEND_FROM_EMAIL ?? 'onboarding@resend.dev'
-  const rows = [
-    ['Client', profile?.full_name ?? user.email],
-    ['Phone', phone_number || '—'],
-    ['Item', item_name],
-    ['Brand', brand || '—'],
-    ['Budget', budget_gbp != null ? `£${budget_gbp}` : '—'],
-    ['Size', size || '—'],
-    ['Colour', colour || '—'],
-    ['Notes', notes || '—'],
-  ]
+  const clientName = profile?.full_name ?? user.email ?? 'Unknown'
+  const budget = budget_gbp != null ? `£${budget_gbp}` : 'Not specified'
 
-  resend.emails
-    .send({
-      from: fromEmail,
-      to: 'tstheshopper@outlook.com',
-      subject: `New Request: ${item_name}`,
-      html: `
-        <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-          <h2 style="margin-bottom:24px">New Sourcing Request</h2>
-          <table style="width:100%;border-collapse:collapse">
-            ${rows
-              .map(
-                ([label, value]) => `
-              <tr>
-                <td style="padding:8px 12px;background:#f5f5f5;font-weight:600;width:120px;border:1px solid #e0e0e0">${label}</td>
-                <td style="padding:8px 12px;border:1px solid #e0e0e0">${value}</td>
-              </tr>`,
-              )
-              .join('')}
-          </table>
-          ${appUrl ? `<p style="margin-top:24px"><a href="${appUrl}/admin/${inserted.id}">View Request →</a></p>` : ''}
-        </div>
-      `,
-    })
-    .catch((err: unknown) => console.error('Admin email failed:', err))
+  await resend.emails.send({
+    from: 'The Shopper <onboarding@resend.dev>',
+    to: 'tstheshopper@outlook.com',
+    subject: `New Request — ${item_name} from ${clientName}`,
+    html: `
+      <h2>New Request Received</h2>
+      <p><strong>Client:</strong> ${clientName}</p>
+      <p><strong>Item:</strong> ${item_name}</p>
+      <p><strong>Brand:</strong> ${brand || 'Not specified'}</p>
+      <p><strong>Budget:</strong> ${budget}</p>
+      <p><strong>Notes:</strong> ${notes || 'None'}</p>
+      <br/>
+      <a href="https://theshopper.shop/admin">View in Admin Panel</a>
+    `,
+  })
 
   return NextResponse.json({ success: true })
 }

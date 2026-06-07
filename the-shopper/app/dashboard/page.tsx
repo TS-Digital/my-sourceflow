@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import Navbar from '@/components/Navbar'
 import StatusBadge from '@/components/StatusBadge'
+import LeaveReviewForm from '@/components/LeaveReviewForm'
 
 const TICKER_SEGMENT =
   'THE SHOPPER\u2003\u2736\u2003YOU WANT IT YOU GOT IT\u2003\u2736\u2003LUXURY PERSONAL SHOPPING\u2003\u2736\u2003'
@@ -136,7 +137,7 @@ export default async function DashboardPage() {
         </section>
 
         {/* Request cards */}
-        <section id="requests" className="max-w-7xl mx-auto px-4 sm:px-6 pb-16">
+        <section id="requests" className="max-w-7xl mx-auto px-4 sm:px-6 pb-10">
           <div className="flex items-center justify-between mb-5">
             <h2 className="font-display text-2xl sm:text-3xl text-brand-text uppercase tracking-wide">
               Your Requests
@@ -201,6 +202,24 @@ export default async function DashboardPage() {
             </div>
           )}
         </section>
+
+        {/* Leave a Review */}
+        {stats.completed > 0 && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-16">
+            <div className="mb-5">
+              <p className="font-mono text-[10px] text-brand-gold uppercase tracking-[0.3em] mb-1">
+                Share Your Experience
+              </p>
+              <h2 className="font-display text-2xl sm:text-3xl text-brand-text uppercase tracking-wide">
+                Leave a Review
+              </h2>
+            </div>
+            <LeaveReviewForm
+              userId={user.id}
+              clientName={profile?.full_name ?? user.email?.split('@')[0] ?? 'Client'}
+            />
+          </section>
+        )}
       </div>
     </>
   )

@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { signOut } from '@/lib/actions'
+import { signOut, approveReview } from '@/lib/actions'
 import AdminOrdersTable from '@/components/AdminOrdersTable'
 
 export default async function AdminPage() {
@@ -29,6 +29,12 @@ export default async function AdminPage() {
     .order('created_at', { ascending: false })
 
   const { data: statuses } = await supabase.from('statuses').select('id, name').order('id')
+
+  const { data: pendingReviews } = await supabase
+    .from('reviews')
+    .select('id, client_name, rating, quote, location, created_at')
+    .eq('approved', false)
+    .order('created_at', { ascending: false })
 
   type StatusRow = { id: number; name: string } | null
   type ProfileRow = { full_name: string } | null
@@ -156,7 +162,7 @@ export default async function AdminPage() {
         </div>
 
         {/* ── Orders table ── */}
-        <div className="bg-brand-surface border border-brand-border mb-16">
+        <div className="bg-brand-surface border border-brand-border mb-12">
           <div className="px-6 py-4 border-b border-brand-border flex items-center justify-between">
             <h2 className="font-display text-xl text-brand-text uppercase">All Orders</h2>
             <span className="font-mono text-[10px] text-brand-muted uppercase tracking-widest">
@@ -165,6 +171,75 @@ export default async function AdminPage() {
           </div>
 
           <AdminOrdersTable orders={orders} statuses={allStatuses} />
+        </div>
+
+        {/* ── Pending reviews ── */}
+        <div className="mb-16">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-display text-xl text-brand-text uppercase">Pending Reviews</h2>
+            <span className="font-mono text-[10px] text-brand-muted uppercase tracking-widest">
+              {(pendingReviews ?? []).length} pending
+            </span>
+          </div>
+
+          {!pendingReviews || pendingReviews.length === 0 ? (
+            <div className="bg-brand-surface border border-brand-border px-6 py-12 text-center">
+              <p className="font-sans text-brand-muted text-sm">No reviews awaiting approval.</p>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {pendingReviews.map((review) => (
+                <div
+                  key={review.id}
+                  className="bg-brand-surface border border-brand-border px-6 py-5 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4"
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="font-mono text-[11px] text-brand-gold uppercase tracking-[0.15em]">
+                        {review.client_name}
+                      </span>
+                      {review.location && (
+                        <span className="font-mono text-[10px] text-brand-muted uppercase tracking-widest">
+                          {review.location}
+                        </span>
+                      )}
+                      <span className="font-mono text-[10px] text-brand-muted ml-auto sm:ml-0">
+                        {new Date(review.created_at).toLocaleDateString('en-GB', {
+                          day: 'numeric',
+                          month: 'short',
+                          year: '2-digit',
+                        })}
+                      </span>
+                    </div>
+                    <div className="flex gap-0.5 mb-3" aria-label={`${review.rating} out of 5 stars`}>
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <span
+                          key={i}
+                          className={`text-sm ${i <= review.rating ? 'text-brand-gold' : 'text-brand-muted/30'}`}
+                          aria-hidden="true"
+                        >
+                          ★
+                        </span>
+                      ))}
+                    </div>
+                    <p className="font-sans text-brand-text/80 text-sm leading-relaxed">
+                      &ldquo;{review.quote}&rdquo;
+                    </p>
+                  </div>
+
+                  <form action={approveReview} className="flex-shrink-0">
+                    <input type="hidden" name="id" value={review.id} />
+                    <button
+                      type="submit"
+                      className="bg-brand-gold text-brand-bg font-mono text-[10px] font-bold tracking-widest uppercase px-5 min-h-[36px] hover:bg-brand-gold-hover transition-colors whitespace-nowrap"
+                    >
+                      Approve
+                    </button>
+                  </form>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </main>
     </div>
