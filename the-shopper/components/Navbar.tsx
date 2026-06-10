@@ -28,6 +28,13 @@ export default async function Navbar() {
         { href: '/requests/new', label: 'New Request' },
       ]
 
+  const publicLinks = [
+    { href: '/', label: 'Home' },
+    { href: '/services', label: 'Services' },
+    { href: '/about', label: 'About' },
+    { href: '/journal', label: 'Journal' },
+  ]
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-brand-border bg-brand-bg/95 backdrop-blur-sm">
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 h-16 flex items-center justify-between">
@@ -46,6 +53,16 @@ export default async function Navbar() {
 
         {/* Desktop centre links */}
         <div className="hidden md:flex items-center gap-8">
+          {!isAdmin && publicLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="font-mono text-[11px] text-brand-muted hover:text-brand-gold uppercase tracking-[0.2em] transition-colors"
+            >
+              {link.label}
+            </Link>
+          ))}
+          {!isAdmin && <span className="w-px h-4 bg-brand-border" />}
           {links.map((link) => (
             <Link
               key={link.href}
@@ -73,6 +90,7 @@ export default async function Navbar() {
         {/* Mobile: hamburger */}
         <NavMobileMenu
           links={links}
+          publicLinks={isAdmin ? [] : publicLinks}
           displayName={displayName}
           isAdmin={isAdmin}
           initial={initial}

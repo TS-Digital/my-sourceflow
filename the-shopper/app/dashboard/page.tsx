@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
-import Navbar from '@/components/Navbar'
+import SiteNav from '@/components/SiteNav'
 import StatusBadge from '@/components/StatusBadge'
 import LeaveReviewForm from '@/components/LeaveReviewForm'
 
@@ -46,10 +46,8 @@ export default async function DashboardPage() {
   const firstName = profile?.full_name?.split(' ')[0] || user.email?.split('@')[0] || 'there'
 
   return (
-    <>
-      <Navbar />
-
-      <div className="pt-16">
+    <div className="min-h-screen bg-brand-bg">
+      <SiteNav activePath="/dashboard" />
         {/* Gold scrolling ticker */}
         <div className="bg-brand-gold overflow-hidden py-2.5">
           <div className="flex animate-ticker" style={{ width: 'max-content' }}>
@@ -220,7 +218,6 @@ export default async function DashboardPage() {
             />
           </section>
         )}
-      </div>
-    </>
+    </div>
   )
 }

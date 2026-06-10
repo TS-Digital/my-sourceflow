@@ -11,12 +11,13 @@ interface NavLink {
 
 interface Props {
   links: NavLink[]
+  publicLinks: NavLink[]
   displayName: string
   isAdmin: boolean
   initial: string
 }
 
-export default function NavMobileMenu({ links, displayName, isAdmin, initial }: Props) {
+export default function NavMobileMenu({ links, publicLinks, displayName, isAdmin, initial }: Props) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -53,6 +54,21 @@ export default function NavMobileMenu({ links, displayName, isAdmin, initial }: 
       {/* Slide-down panel */}
       {open && (
         <div className="absolute top-16 left-0 right-0 z-40 bg-brand-surface border-b border-brand-border px-6 py-6 flex flex-col gap-1">
+          {publicLinks.length > 0 && (
+            <>
+              {publicLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className="font-mono text-xs text-brand-muted hover:text-brand-gold uppercase tracking-[0.2em] transition-colors flex items-center min-h-[44px]"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <div className="h-px bg-brand-border my-2" />
+            </>
+          )}
           {links.map((link) => (
             <Link
               key={link.href}

@@ -1,12 +1,5 @@
-import Image from 'next/image'
 import Link from 'next/link'
-
-const NAV_LINKS = [
-  { label: 'Home', href: '/' },
-  { label: 'Services', href: '/services' },
-  { label: 'About', href: '/about' },
-  { label: 'Journal', href: '/journal' },
-]
+import SiteNav from '@/components/SiteNav'
 
 const TIERS = [
   {
@@ -99,42 +92,7 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen bg-brand-bg flex flex-col">
 
-      {/* Nav */}
-      <header className="w-full px-4 sm:px-8 py-5 flex items-center justify-between">
-        <Link href="/" aria-label="The Shopper home">
-          <Image
-            src="/logo-white.png"
-            alt="The Shopper"
-            width={150}
-            height={40}
-            className="h-9 w-auto object-contain"
-            priority
-          />
-        </Link>
-
-        <nav className="hidden md:flex items-center gap-8" aria-label="Primary navigation">
-          {NAV_LINKS.map(({ label, href }) => (
-            <Link
-              key={label}
-              href={href}
-              className={`font-mono text-[11px] uppercase tracking-[0.2em] transition-colors focus-visible:text-brand-gold ${
-                label === 'Services'
-                  ? 'text-brand-gold'
-                  : 'text-brand-muted hover:text-brand-gold'
-              }`}
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
-
-        <Link
-          href="/login"
-          className="font-mono text-[11px] text-brand-text hover:text-brand-gold focus-visible:text-brand-gold transition-colors uppercase tracking-[0.2em]"
-        >
-          Sign In
-        </Link>
-      </header>
+      <SiteNav activePath="/services" />
 
       <main className="flex-1 flex flex-col">
 

@@ -151,9 +151,12 @@ CREATE POLICY "requests: client insert"
   ON public.requests FOR INSERT
   WITH CHECK (client_id = auth.uid());
 
-CREATE POLICY "requests: own or admin update"
+-- Restricted to admins only — clients never need to update requests directly.
+-- The status update API route runs under an authenticated admin session, so
+-- is_admin() resolves correctly there.
+CREATE POLICY "requests: admin update"
   ON public.requests FOR UPDATE
-  USING (client_id = auth.uid() OR is_admin());
+  USING (is_admin());
 
 -- request_notes
 CREATE POLICY "request_notes: accessible request read"
@@ -169,6 +172,42 @@ CREATE POLICY "request_notes: accessible request read"
 CREATE POLICY "request_notes: admin insert"
   ON public.request_notes FOR INSERT
   WITH CHECK (is_admin() AND admin_id = auth.uid());
+
+-- ------------------------------------------------------------
+-- 8. reviews
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.reviews (
+  id          UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id     UUID        NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  client_name TEXT        NOT NULL DEFAULT '',
+  rating      SMALLINT    NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  quote       TEXT        NOT NULL,
+  location    TEXT,
+  approved    BOOLEAN     NOT NULL DEFAULT FALSE,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE public.reviews ENABLE ROW LEVEL SECURITY;
+
+-- Approved reviews are publicly readable (landing page, unauthenticated visitors)
+CREATE POLICY "reviews: approved public read"
+  ON public.reviews FOR SELECT
+  USING (approved = true);
+
+-- Admins can read every review (including unapproved ones in the queue)
+CREATE POLICY "reviews: admin read all"
+  ON public.reviews FOR SELECT
+  USING (is_admin());
+
+-- Authenticated users may insert their own review; unauthenticated cannot
+CREATE POLICY "reviews: authenticated insert"
+  ON public.reviews FOR INSERT
+  WITH CHECK (auth.uid() IS NOT NULL AND user_id = auth.uid());
+
+-- Only admins may update reviews (approve / reject)
+CREATE POLICY "reviews: admin update"
+  ON public.reviews FOR UPDATE
+  USING (is_admin());
 
 -- ============================================================
 -- To promote a user to admin, run:

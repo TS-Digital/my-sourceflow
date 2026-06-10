@@ -2,16 +2,10 @@ import { redirect } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import SiteNav from '@/components/SiteNav'
 
 const TICKER_SEGMENT =
   'THE SHOPPER ✶ YOU WANT IT YOU GOT IT ✶ LUXURY PERSONAL SHOPPING ✶ '
-
-const NAV_LINKS = [
-  { label: 'Home', href: '/' },
-  { label: 'Services', href: '/services' },
-  { label: 'About', href: '/about' },
-  { label: 'Journal', href: '/journal' },
-]
 
 const HOW_IT_WORKS = [
   {
@@ -89,38 +83,8 @@ export default async function LandingPage() {
   return (
     <div className="min-h-screen bg-brand-bg flex flex-col">
 
-      {/* Nav */}
-      <header className="w-full px-4 sm:px-8 py-5 flex items-center justify-between">
-        <Link href="/" aria-label="The Shopper home">
-          <Image
-            src="/logo-white.png"
-            alt="The Shopper"
-            width={150}
-            height={40}
-            className="h-9 w-auto object-contain"
-            priority
-          />
-        </Link>
+      <SiteNav activePath="/" />
 
-        <nav className="hidden md:flex items-center gap-8" aria-label="Primary navigation">
-          {NAV_LINKS.map(({ label, href }) => (
-            <Link
-              key={label}
-              href={href}
-              className="font-mono text-[11px] text-brand-muted hover:text-brand-gold focus-visible:text-brand-gold transition-colors uppercase tracking-[0.2em]"
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
-
-        <Link
-          href="/login"
-          className="font-mono text-[11px] text-brand-text hover:text-brand-gold focus-visible:text-brand-gold transition-colors uppercase tracking-[0.2em]"
-        >
-          Sign In
-        </Link>
-      </header>
 
       <main className="flex-1 flex flex-col">
 
@@ -137,10 +101,10 @@ export default async function LandingPage() {
                 Luxury Personal Shopping
               </p>
 
-              <h1 className="font-display text-[clamp(4rem,10vw,8rem)] text-brand-text uppercase leading-none mb-2">
+              <h1 className="font-display text-[clamp(2.75rem,10vw,8rem)] text-brand-text uppercase leading-none mb-2">
                 You Want It
               </h1>
-              <h1 className="font-display text-[clamp(4rem,10vw,8rem)] text-brand-gold uppercase leading-none mb-6">
+              <h1 className="font-display text-[clamp(2.75rem,10vw,8rem)] text-brand-gold uppercase leading-none mb-6">
                 You Got It
               </h1>
 
@@ -175,7 +139,7 @@ export default async function LandingPage() {
                   alt="The Shopper mascot"
                   width={480}
                   height={480}
-                  className="w-full max-w-[200px] sm:max-w-[300px] md:max-w-[400px] lg:max-w-[480px] object-contain select-none"
+                  className="w-full max-w-[140px] sm:max-w-[300px] md:max-w-[400px] lg:max-w-[480px] object-contain select-none"
                   priority
                   unoptimized
                 />
@@ -187,7 +151,7 @@ export default async function LandingPage() {
         {/* How It Works */}
         <section
           id="how-it-works"
-          className="py-20 sm:py-28"
+          className="py-12 sm:py-28"
           aria-labelledby="hiw-heading"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-8">
@@ -214,7 +178,7 @@ export default async function LandingPage() {
                     {step}
                   </span>
                   <h3 className="font-display text-[1.6rem] text-brand-text uppercase leading-tight">
-                    Step {step}: {title}
+                    {title}
                   </h3>
                   <p className="font-sans text-brand-muted text-sm leading-relaxed">{desc}</p>
                 </div>
@@ -224,7 +188,7 @@ export default async function LandingPage() {
         </section>
 
         {/* What We Source */}
-        <section className="py-20 sm:py-28" aria-labelledby="wws-heading">
+        <section className="py-12 sm:py-28" aria-labelledby="wws-heading">
           <div className="max-w-7xl mx-auto px-4 sm:px-8">
             <p className="font-mono text-[10px] text-brand-gold uppercase tracking-[0.3em] mb-3">
               Categories
@@ -240,7 +204,7 @@ export default async function LandingPage() {
               {CATEGORIES.map((cat) => (
                 <div
                   key={cat}
-                  className="group bg-brand-surface border border-white/5 px-6 py-10 flex items-center justify-center hover:border-brand-gold/40 hover:bg-brand-elevated transition-all"
+                  className="group bg-brand-surface border border-white/5 px-6 h-24 sm:h-auto sm:py-10 flex items-center justify-center hover:border-brand-gold/40 hover:bg-brand-elevated transition-all"
                 >
                   <span className="font-mono text-[11px] text-brand-muted group-hover:text-brand-gold uppercase tracking-[0.25em] transition-colors text-center">
                     {cat}
@@ -252,7 +216,7 @@ export default async function LandingPage() {
         </section>
 
         {/* Testimonials */}
-        <section className="py-20 sm:py-28" aria-labelledby="testimonials-heading">
+        <section className="py-12 sm:py-28" aria-labelledby="testimonials-heading">
           <div className="max-w-7xl mx-auto px-4 sm:px-8">
             <p className="font-mono text-[10px] text-brand-gold uppercase tracking-[0.3em] mb-3">
               Client Love
