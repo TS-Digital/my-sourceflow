@@ -51,7 +51,9 @@ export async function POST(request: NextRequest) {
   const clientName = profile?.full_name ?? user.email ?? 'Unknown'
   const budget = budget_gbp != null ? `£${budget_gbp}` : 'Not specified'
 
-  await resend.emails.send({
+  console.log('Sending email notification...')
+  console.log('RESEND_API_KEY set:', !!process.env.RESEND_API_KEY)
+  const emailResult = await resend.emails.send({
     from: 'The Shopper <onboarding@resend.dev>',
     to: 'tstheshopper@outlook.com',
     subject: `New Request — ${item_name} from ${clientName}`,
@@ -66,6 +68,7 @@ export async function POST(request: NextRequest) {
       <a href="https://theshopper.shop/admin">View in Admin Panel</a>
     `,
   })
+  console.log('Resend response:', JSON.stringify(emailResult))
 
   return NextResponse.json({ success: true })
 }
