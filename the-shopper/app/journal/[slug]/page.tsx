@@ -82,14 +82,14 @@ export default async function PostPage({ params }: Props) {
             <img
               src={post.image}
               alt={post.title}
-              className="w-full h-auto mb-10"
+              className="w-full max-w-[460px] h-auto mx-auto mb-10"
             />
           ) : post.image ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={post.image}
               alt={post.title}
-              className={`w-full object-cover ${post.heroHeight ?? 'h-64 md:h-[500px]'} mb-10 ${post.imagePosition ?? 'object-center'}`}
+              className={`w-full object-cover ${post.heroHeight ?? 'h-64 md:h-[500px]'} mb-10 ${post.heroImagePosition ?? post.imagePosition ?? 'object-center'}`}
             />
           ) : null}
 
