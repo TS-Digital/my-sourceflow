@@ -27,7 +27,7 @@ export const posts: Post[] = [
   },
   {
     slug: 'coach-tabby-bag-item-of-the-week',
-    category: 'ITEM OF THE WEEK',
+    category: 'PAST ITEM OF THE WEEK',
     title: 'THE COACH TABBY BAG',
     date: 'June 2026',
     image: '/journal/coach-tabby-bag-item-of-the-week.jpg',
