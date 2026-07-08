@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Bebas_Neue, Space_Mono, DM_Sans } from 'next/font/google'
+import Link from 'next/link'
 import './globals.css'
 
 const bebasNeue = Bebas_Neue({
@@ -35,8 +36,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body>
         {children}
-        <footer className="py-6 px-4 text-center font-mono text-[9px] text-brand-muted uppercase tracking-widest">
-          The Shopper is an independent personal shopping service and is not affiliated with, endorsed by, or sponsored by any brand referenced on this site.
+        <footer className="py-6 px-4 text-center font-mono text-[9px] text-brand-muted uppercase tracking-widest space-y-2">
+          <p>
+            The Shopper is an independent personal shopping service and is not affiliated with, endorsed by, or
+            sponsored by any brand referenced on this site.
+          </p>
+          <p className="space-x-3">
+            <Link href="/privacy" className="hover:text-brand-gold transition-colors">
+              Privacy Policy
+            </Link>
+            <span>&middot;</span>
+            <Link href="/terms" className="hover:text-brand-gold transition-colors">
+              Terms of Service
+            </Link>
+          </p>
         </footer>
       </body>
     </html>
