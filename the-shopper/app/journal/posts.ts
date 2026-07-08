@@ -11,11 +11,25 @@ export type Post = {
 
 export const posts: Post[] = [
   {
+    slug: 'jacquemus-nike-moon-shoe-item-of-the-week',
+    category: 'ITEM OF THE WEEK',
+    title: 'THE JACQUEMUS X NIKE MOON SHOE',
+    date: 'July 2026',
+    featured: true,
+    excerpt:
+      'Solange fronted the campaign, it sold out again within hours, and the waitlist keeps growing. The ballet-core sneaker moment just found its main character.',
+    content: [
+      'Nike dug into the archive for this one. The original Moon Shoe was hand-made by Bill Bowerman for the 1972 Olympic trials — Jacquemus took that silhouette and gave it a ruched nylon upper, an elasticated back, and a Nike Grind outsole. Heritage meets ballet flat. It should not work. It works.',
+      'Three drops in, every colourway has sold out inside hours. Black, university red, white, and now brown, Sail, and pink for the summer run. Retail lists open and close before most people even see the notification.',
+      'This is the ballet sneaker trend at its peak — soft, feminine silhouettes replacing the chunky trainer era, but with enough Nike DNA to stay credible on both sides of the fashion-versus-sneakerhead divide. Celine and Miu Miu have their own versions circling the same energy; this is the one everyone is actually asking us for.',
+      'We are tracking every restock across regions right now. Sizes go in minutes, resale is already inflated, and the next drop date is not public yet. Drop a request and we get you in before the general release.',
+    ],
+  },
+  {
     slug: 'coach-tabby-bag-item-of-the-week',
     category: 'ITEM OF THE WEEK',
     title: 'THE COACH TABBY BAG',
     date: 'June 2026',
-    featured: true,
     image: '/journal/coach-tabby-bag-item-of-the-week.jpg',
     excerpt:
       'Coach is back and the Tabby is leading the charge. Vintage shape, modern energy, and a price point that makes sense. Here is why this is the bag of the moment.',
@@ -24,6 +38,49 @@ export const posts: Post[] = [
       'Soft structured leather, iconic C hardware, bold colours and metallic finishes. Looks expensive without screaming about it. That balance is rare at this price.',
       'The silhouette is 70s but the energy is now. Strap drops at the right length, the turnlock closure is a proper old-money detail. TikTok caught on first — now the streets have too.',
       'We are sourcing the Tabby in every colourway right now. Classic black, cherry red, limited seasonal drops. Drop a request and we handle the rest.',
+    ],
+  },
+  {
+    slug: 'the-soccer-casual-fit',
+    category: 'OUTFIT BREAKDOWN',
+    title: 'THE SOCCER CASUAL FIT',
+    date: 'July 2026',
+    excerpt:
+      'Retro boot-inspired trainers, a boxy track top, tapered trousers. Terrace culture is back in the front row.',
+    content: [
+      'Soccer casual is not a costume. Done right it borrows the low-profile trainer, the boxy zip track top, and the tapered leg — and drops the shirt entirely. Vintage colourways over anything branded loud.',
+      'The build: retro football-boot-inspired trainer in a muted colourway, a fitted zip track top layered over a plain tee, straight-leg trousers with a slight taper. Nothing oversized, nothing screaming a badge.',
+      'The trainer does the talking. Low profile, suede or soft leather, a colourway that looks pulled from an old kit rather than a current one. This is the detail that separates the fit from fancy dress.',
+      'We are sourcing the archive boot-inspired releases and the harder-to-find colourways every week. Drop a request and we will put the fit together properly.',
+    ],
+  },
+  {
+    slug: 'why-ballet-sneakers-are-everywhere',
+    category: 'CULTURE',
+    title: 'WHY BALLET SNEAKERS ARE EVERYWHERE',
+    date: 'July 2026',
+    excerpt:
+      'Soft, feminine, and suddenly on every It girl. We break down why the ballet sneaker beat the chunky trainer.',
+    content: [
+      'For a decade the loudest trainer won. Chunky soles, exaggerated proportions, dad-shoe energy dressed up as fashion. That cycle is ending, and the ballet sneaker is what replaced it.',
+      'Celine started the runway version, Miu Miu pushed it further with the Plume, and Nike and Jacquemus turned it into a genuine sellout. Soft uppers, ribbon-like laces, a silhouette borrowed straight from the studio rather than the court.',
+      'It works because it is the opposite of everything the last era stood for. Quiet instead of loud, feminine instead of technical, and it pairs with tailoring as easily as it pairs with denim. Maximalist silver trainers are having their own moment alongside it, but the ballet shoe is the one crossing into everyday wear.',
+      'We are sourcing across the ballet-sneaker field right now — Celine, Miu Miu, and the Jacquemus x Nike drops. Drop a request and we will find your size before the restock disappears.',
+    ],
+  },
+  {
+    slug: 'how-to-source-a-used-car-without-getting-burned',
+    category: 'SOURCING GUIDE',
+    title: 'HOW TO SOURCE A USED CAR WITHOUT GETTING BURNED',
+    date: 'July 2026',
+    excerpt:
+      'Bigger ticket, bigger risk. Here is how we vet a used car before a client ever hands over a deposit.',
+    content: [
+      'A bag scam costs you a few hundred pounds and a bad week. A car scam costs you thousands and a legal headache. The stakes are different, so the process has to be tighter.',
+      'Step one, every time: a full history check before anyone gets excited. Outstanding finance, previous write-off status, stolen markers, mileage that does not add up against MOT records. Skip this and you are buying blind.',
+      'Step two: paperwork matches the person. The name on the V5C logbook should match the seller, and the registered address should match where you are viewing the car. Private sellers who "have the log book coming" or want to meet somewhere other than the registered address are a red flag, not a coincidence.',
+      'Step three: view in daylight, drive it properly, and get an independent inspection before money changes hands — not the seller\'s mechanic, yours. We arrange this for every client so nobody is relying on a five-minute test drive and a gut feeling.',
+      'This is a new lane for us but the principle is identical to sourcing a bag or a pair of trainers: know the category, verify before you commit, and do the boring due diligence so the client does not have to. Drop a request and we will run the whole process for you.',
     ],
   },
   {
