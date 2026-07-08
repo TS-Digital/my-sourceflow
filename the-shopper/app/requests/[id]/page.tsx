@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import Navbar from '@/components/Navbar'
 import StatusBadge from '@/components/StatusBadge'
+import ClientReplyForm from '@/components/ClientReplyForm'
 
 const STATUS_TIMELINE = ['New', 'In Progress', 'Sourced', 'Completed']
 
@@ -45,7 +46,7 @@ export default async function RequestDetailPage({
 
   const { data: notes } = await supabase
     .from('request_notes')
-    .select('id, note_text, created_at, profiles!fk_request_notes_admin(full_name)')
+    .select('id, note_text, created_at, author_id, author_role, profiles!fk_request_notes_admin(full_name)')
     .eq('request_id', id)
     .order('created_at', { ascending: true })
 
@@ -136,12 +137,21 @@ export default async function RequestDetailPage({
                 ) : (
                   <div className="space-y-5">
                     {notes.map((note) => {
-                      const admin = (Array.isArray(note.profiles) ? note.profiles[0] : note.profiles) as { full_name: string } | null
+                      const author = (Array.isArray(note.profiles) ? note.profiles[0] : note.profiles) as { full_name: string } | null
+                      const isOwnReply = note.author_role === 'client' && note.author_id === user.id
+                      const label =
+                        note.author_role === 'client'
+                          ? isOwnReply
+                            ? 'You'
+                            : (author?.full_name ?? 'Client')
+                          : (author?.full_name ?? 'The Shopper team')
                       return (
-                        <div key={note.id} className="border-l-2 border-brand-gold pl-4">
+                        <div
+                          key={note.id}
+                          className={`border-l-2 pl-4 ${note.author_role === 'client' ? 'border-brand-border-strong' : 'border-brand-gold'}`}
+                        >
                           <p className="font-mono text-[10px] text-brand-muted mb-1.5">
-                            {admin?.full_name ?? 'The Shopper team'} ·{' '}
-                            {formatDate(note.created_at)}
+                            {label} · {formatDate(note.created_at)}
                           </p>
                           <p className="font-sans text-sm text-brand-text leading-relaxed">
                             {note.note_text}
@@ -153,6 +163,9 @@ export default async function RequestDetailPage({
                 )}
               </div>
             </div>
+            {user.id === request.client_id && (
+              <ClientReplyForm requestId={request.id} />
+            )}
           </div>
 
           {/* Sidebar: timeline */}

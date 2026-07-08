@@ -50,7 +50,8 @@ export async function POST(
 
   const { error: insertError } = await supabase.from('request_notes').insert({
     request_id: id,
-    admin_id: user.id,
+    author_id: user.id,
+    author_role: 'admin',
     note_text: noteText,
   })
 

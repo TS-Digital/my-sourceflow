@@ -1,4 +1,5 @@
 export type Role = 'client' | 'admin'
+export type AuthorRole = 'admin' | 'client'
 
 export interface Profile {
   id: string
@@ -31,7 +32,8 @@ export interface Request {
 export interface RequestNote {
   id: string
   request_id: string
-  admin_id: string
+  author_id: string
+  author_role: AuthorRole
   note_text: string
   created_at: string
 }

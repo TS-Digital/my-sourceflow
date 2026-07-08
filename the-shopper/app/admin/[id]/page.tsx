@@ -47,7 +47,7 @@ export default async function AdminRequestDetailPage({
 
   const { data: notes } = await supabase
     .from('request_notes')
-    .select('id, note_text, created_at, profiles!fk_request_notes_admin(full_name)')
+    .select('id, note_text, created_at, author_role, profiles!fk_request_notes_admin(full_name)')
     .eq('request_id', id)
     .order('created_at', { ascending: true })
 
@@ -149,11 +149,16 @@ export default async function AdminRequestDetailPage({
                 ) : (
                   <div className="space-y-5">
                     {notes.map((note) => {
-                      const admin = (Array.isArray(note.profiles) ? note.profiles[0] : note.profiles) as { full_name: string } | null
+                      const author = (Array.isArray(note.profiles) ? note.profiles[0] : note.profiles) as { full_name: string } | null
+                      const isClientReply = note.author_role === 'client'
                       return (
-                        <div key={note.id} className="border-l-2 border-brand-gold pl-4">
+                        <div
+                          key={note.id}
+                          className={`border-l-2 pl-4 ${isClientReply ? 'border-brand-border-strong' : 'border-brand-gold'}`}
+                        >
                           <p className="font-mono text-[10px] text-brand-muted mb-1.5">
-                            {admin?.full_name ?? 'Admin'} · {formatDate(note.created_at)}
+                            {author?.full_name ?? (isClientReply ? 'Client' : 'Admin')}
+                            {isClientReply && ' · Client Reply'} · {formatDate(note.created_at)}
                           </p>
                           <p className="font-sans text-sm text-brand-text leading-relaxed">
                             {note.note_text}
