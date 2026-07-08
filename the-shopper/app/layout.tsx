@@ -33,7 +33,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${bebasNeue.variable} ${spaceMono.variable} ${dmSans.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        <footer className="py-6 px-4 text-center font-mono text-[9px] text-brand-muted uppercase tracking-widest">
+          The Shopper is an independent personal shopping service and is not affiliated with, endorsed by, or sponsored by any brand referenced on this site.
+        </footer>
+      </body>
     </html>
   )
 }
