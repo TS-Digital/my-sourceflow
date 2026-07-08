@@ -1,5 +1,6 @@
 export type Role = 'client' | 'admin'
 export type AuthorRole = 'admin' | 'client'
+export type PaymentStatus = 'unpaid' | 'paid'
 
 export interface Profile {
   id: string
@@ -25,6 +26,10 @@ export interface Request {
   colour: string | null
   notes: string | null
   phone_number: string | null
+  quoted_price: number | null
+  payment_status: PaymentStatus
+  quoted_at: string | null
+  paid_at: string | null
   created_at: string
   updated_at: string
 }

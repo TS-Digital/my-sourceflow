@@ -113,6 +113,10 @@ export default async function AdminRequestDetailPage({
                     label: 'Budget',
                     value: request.budget_gbp != null ? `£${request.budget_gbp}` : null,
                   },
+                  {
+                    label: 'Quoted Price',
+                    value: request.quoted_price != null ? `£${request.quoted_price} (${request.payment_status})` : null,
+                  },
                   { label: 'Submitted', value: formatDate(request.created_at) },
                   { label: 'Updated', value: formatDate(request.updated_at) },
                 ].map(({ label, value }) => (
@@ -181,6 +185,8 @@ export default async function AdminRequestDetailPage({
               statusTimeline={STATUS_TIMELINE}
               currentStatusName={statusName}
               statusIdx={statusIdx}
+              quotedPrice={request.quoted_price}
+              paymentStatus={request.payment_status}
             />
           </div>
         </div>

@@ -54,6 +54,7 @@ export default async function RequestDetailPage({
   const statusIdx = STATUS_TIMELINE.indexOf(statusName)
   const shortId = request.id.slice(0, 8).toUpperCase()
   const backHref = profile?.role === 'admin' ? `/admin/${request.id}` : '/dashboard'
+  const paymentLink = process.env.PAYMENT_LINK
 
   return (
     <>
@@ -85,6 +86,44 @@ export default async function RequestDetailPage({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Main — 2/3 width on desktop */}
           <div className="md:col-span-2 space-y-5">
+            {/* Payment */}
+            {request.quoted_price != null && (
+              <div className="bg-brand-surface border border-brand-gold">
+                <div className="px-6 py-4 border-b border-brand-border">
+                  <h2 className="font-display text-xl text-brand-text uppercase">Payment</h2>
+                </div>
+                <div className="p-6">
+                  <p className="font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-1">
+                    Amount Due
+                  </p>
+                  <p className="font-display text-3xl text-brand-text mb-4">
+                    £{Number(request.quoted_price).toFixed(2)}
+                  </p>
+                  {request.payment_status === 'paid' ? (
+                    <p className="font-mono text-[10px] text-brand-gold uppercase tracking-widest">
+                      ✓ Payment Received
+                    </p>
+                  ) : (
+                    <>
+                      {paymentLink && (
+                        <a
+                          href={paymentLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center bg-brand-gold text-brand-bg font-mono text-[10px] font-bold tracking-widest uppercase px-8 min-h-[44px] hover:bg-brand-gold-hover transition-colors mb-3"
+                        >
+                          Pay Now
+                        </a>
+                      )}
+                      <p className="font-sans text-xs text-brand-muted">
+                        Please include reference <strong>{shortId}</strong> with your payment.
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Details */}
             <div className="bg-brand-surface border border-brand-border">
               <div className="px-6 py-4 border-b border-brand-border">
