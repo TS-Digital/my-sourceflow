@@ -7,6 +7,8 @@ export type Post = {
   excerpt: string
   image?: string
   imagePosition?: string
+  heroHeight?: string
+  heroFit?: 'cover' | 'natural'
   content?: string[]
 }
 
@@ -18,6 +20,7 @@ export const posts: Post[] = [
     date: 'July 2026',
     featured: true,
     image: '/journal/jacquemus-nike-moon-shoe-item-of-the-week.jp.jpg',
+    heroHeight: 'h-72 md:h-[600px]',
     excerpt:
       'Solange fronted the campaign, it sold out again within hours, and the waitlist keeps growing. The ballet-core sneaker moment just found its main character.',
     content: [
@@ -33,6 +36,7 @@ export const posts: Post[] = [
     title: 'THE COACH TABBY BAG',
     date: 'June 2026',
     image: '/journal/coach-tabby-bag-item-of-the-week.jpg',
+    imagePosition: 'object-bottom',
     excerpt:
       'Coach is back and the Tabby is leading the charge. Vintage shape, modern energy, and a price point that makes sense. Here is why this is the bag of the moment.',
     content: [
@@ -49,6 +53,7 @@ export const posts: Post[] = [
     date: 'July 2026',
     image: '/journal/the-soccer-casual-fit.jpg.jpg',
     imagePosition: 'object-top',
+    heroFit: 'natural',
     excerpt:
       'Retro boot-inspired trainers, a boxy track top, tapered trousers. Terrace culture is back in the front row.',
     content: [
@@ -80,6 +85,7 @@ export const posts: Post[] = [
     title: 'HOW TO SOURCE A WATCH WITHOUT GETTING BURNED',
     date: 'July 2026',
     image: '/journal/how-to-source-a-watch-without-getting-burned.jpg.jpg',
+    heroHeight: 'h-72 md:h-[600px]',
     excerpt:
       'Superfakes are good enough to fool most jewellers now. Here is how we make sure what lands on your wrist is real.',
     content: [
