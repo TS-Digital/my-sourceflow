@@ -6,6 +6,7 @@ export type Post = {
   featured?: boolean
   excerpt: string
   image?: string
+  imagePosition?: string
   content?: string[]
 }
 
@@ -47,6 +48,7 @@ export const posts: Post[] = [
     title: 'THE SOCCER CASUAL FIT',
     date: 'July 2026',
     image: '/journal/the-soccer-casual-fit.jpg.jpg',
+    imagePosition: 'object-top',
     excerpt:
       'Retro boot-inspired trainers, a boxy track top, tapered trousers. Terrace culture is back in the front row.',
     content: [
@@ -62,6 +64,7 @@ export const posts: Post[] = [
     title: 'WHY BALLET SNEAKERS ARE EVERYWHERE',
     date: 'July 2026',
     image: '/journal/why-ballet-sneakers-are-everywhere.jpg.jpg',
+    imagePosition: 'object-bottom',
     excerpt:
       'Soft, feminine, and suddenly on every It girl. We break down why the ballet sneaker beat the chunky trainer.',
     content: [

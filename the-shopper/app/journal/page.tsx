@@ -64,7 +64,7 @@ export default function JournalPage() {
                 <img
                   src={featuredPost.image}
                   alt={featuredPost.title}
-                  className="w-full h-full object-cover"
+                  className={`w-full h-full object-cover ${featuredPost.imagePosition ?? 'object-center'}`}
                 />
               </div>
             )}
@@ -80,7 +80,7 @@ export default function JournalPage() {
             Recent posts
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {gridPosts.map(({ slug, category, title, excerpt, image }) => (
+            {gridPosts.map(({ slug, category, title, excerpt, image, imagePosition }) => (
               <Link
                 key={slug}
                 href={`/journal/${slug}`}
@@ -89,7 +89,11 @@ export default function JournalPage() {
                 {image && (
                   <div className="-mx-7 -mt-7">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={image} alt={title} className="w-full object-cover h-48" />
+                    <img
+                      src={image}
+                      alt={title}
+                      className={`w-full object-cover h-48 ${imagePosition ?? 'object-center'}`}
+                    />
                   </div>
                 )}
                 <p className="font-mono text-[10px] text-brand-gold uppercase tracking-[0.3em]">
@@ -155,7 +159,7 @@ export default function JournalPage() {
             </h2>
             <Link
               href="/login"
-              className="shrink-0 inline-flex items-center justify-center bg-brand-bg text-brand-gold font-mono text-[11px] font-bold tracking-[0.2em] uppercase px-10 min-h-[52px] hover:bg-brand-surface focus-visible:ring-2 focus-visible:ring-brand-bg focus-visible:ring-offset-2 focus-visible:ring-offset-brand-gold transition-colors whitespace-nowrap"
+              className="shrink-0 inline-flex items-center justify-center bg-brand-bg text-brand-gold font-mono text-[11px] font-bold tracking-[0.2em] uppercase px-10 min-h-[52px] hover:bg-brand-surface focus-visible:ring-2 focus-visible:ring-brand-bg focus-visible:ring-offset-2 focus-visible:ring-offset-brand-gold transition-colors"
             >
               Start a Request →
             </Link>
