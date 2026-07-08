@@ -51,24 +51,27 @@ export async function POST(request: NextRequest) {
   const clientName = profile?.full_name ?? user.email ?? 'Unknown'
   const budget = budget_gbp != null ? `£${budget_gbp}` : 'Not specified'
 
-  console.log('Sending email notification...')
-  console.log('RESEND_API_KEY set:', !!process.env.RESEND_API_KEY)
-  const emailResult = await resend.emails.send({
-    from: 'The Shopper <onboarding@resend.dev>',
-    to: 'tstheshopper@outlook.com',
-    subject: `New Request — ${item_name} from ${clientName}`,
-    html: `
-      <h2>New Request Received</h2>
-      <p><strong>Client:</strong> ${clientName}</p>
-      <p><strong>Item:</strong> ${item_name}</p>
-      <p><strong>Brand:</strong> ${brand || 'Not specified'}</p>
-      <p><strong>Budget:</strong> ${budget}</p>
-      <p><strong>Notes:</strong> ${notes || 'None'}</p>
-      <br/>
-      <a href="https://theshopper.shop/admin">View in Admin Panel</a>
-    `,
-  })
-  console.log('Resend response:', JSON.stringify(emailResult))
+  // Notify the business — this must never break request submission
+  try {
+    const fromEmail = process.env.RESEND_FROM_EMAIL ?? 'onboarding@resend.dev'
+    await resend.emails.send({
+      from: fromEmail,
+      to: 'tstheshopper@outlook.com',
+      subject: `New Request — ${item_name} from ${clientName}`,
+      html: `
+        <h2>New Request Received</h2>
+        <p><strong>Client:</strong> ${clientName}</p>
+        <p><strong>Item:</strong> ${item_name}</p>
+        <p><strong>Brand:</strong> ${brand || 'Not specified'}</p>
+        <p><strong>Budget:</strong> ${budget}</p>
+        <p><strong>Notes:</strong> ${notes || 'None'}</p>
+        <br/>
+        <a href="https://theshopper.shop/admin">View in Admin Panel</a>
+      `,
+    })
+  } catch (err) {
+    console.error('New-request admin notification email failed:', err)
+  }
 
-  return NextResponse.json({ success: true })
+  return NextResponse.json({ success: true, id: inserted?.id })
 }
