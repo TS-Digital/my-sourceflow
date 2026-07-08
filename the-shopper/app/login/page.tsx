@@ -18,6 +18,7 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
@@ -189,16 +190,38 @@ export default function LoginPage() {
                   <label className="block font-mono text-[10px] text-brand-muted uppercase tracking-widest mb-2">
                     Password
                   </label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={6}
-                    className={inputCls}
-                    placeholder="••••••••"
-                    autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
-                  />
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      minLength={6}
+                      className={`${inputCls} pr-11`}
+                      placeholder="••••••••"
+                      autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((v) => !v)}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      tabIndex={-1}
+                      className="absolute inset-y-0 right-0 flex items-center px-3 text-brand-muted hover:text-brand-gold transition-colors"
+                    >
+                      {showPassword ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M3 3l18 18" />
+                          <path d="M10.58 10.58a2 2 0 0 0 2.83 2.83" />
+                          <path d="M9.88 5.09A9.77 9.77 0 0 1 12 5c6.5 0 10 7 10 7a13.16 13.16 0 0 1-3.05 4.03M6.1 6.1C3.68 7.66 2 12 2 12s3.5 7 10 7a9.76 9.76 0 0 0 4-.83" />
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+                          <circle cx="12" cy="12" r="3" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                   {mode === 'signin' && (
                     <button
                       type="button"
