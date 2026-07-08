@@ -69,18 +69,18 @@ export const posts: Post[] = [
     ],
   },
   {
-    slug: 'how-to-source-a-used-car-without-getting-burned',
+    slug: 'how-to-source-a-watch-without-getting-burned',
     category: 'SOURCING GUIDE',
-    title: 'HOW TO SOURCE A USED CAR WITHOUT GETTING BURNED',
+    title: 'HOW TO SOURCE A WATCH WITHOUT GETTING BURNED',
     date: 'July 2026',
     excerpt:
-      'Bigger ticket, bigger risk. Here is how we vet a used car before a client ever hands over a deposit.',
+      'Superfakes are good enough to fool most jewellers now. Here is how we make sure what lands on your wrist is real.',
     content: [
-      'A bag scam costs you a few hundred pounds and a bad week. A car scam costs you thousands and a legal headache. The stakes are different, so the process has to be tighter.',
-      'Step one, every time: a full history check before anyone gets excited. Outstanding finance, previous write-off status, stolen markers, mileage that does not add up against MOT records. Skip this and you are buying blind.',
-      'Step two: paperwork matches the person. The name on the V5C logbook should match the seller, and the registered address should match where you are viewing the car. Private sellers who "have the log book coming" or want to meet somewhere other than the registered address are a red flag, not a coincidence.',
-      'Step three: view in daylight, drive it properly, and get an independent inspection before money changes hands — not the seller\'s mechanic, yours. We arrange this for every client so nobody is relying on a five-minute test drive and a gut feeling.',
-      'This is a new lane for us but the principle is identical to sourcing a bag or a pair of trainers: know the category, verify before you commit, and do the boring due diligence so the client does not have to. Drop a request and we will run the whole process for you.',
+      'Watches are a different level of risk to a bag or a pair of trainers. The counterfeit game has gotten scary good — superfakes now run genuine movements and pass a magnet test and a loupe check. A quick glance is not authentication, it is a guess.',
+      'Step one: papers, box, and service history. A full set matters for resale and for proving the piece is what it claims to be, but papers can be faked too — so the serial number gets cross-checked against the manufacturer, not just read off the case back.',
+      'Step two: know your source. Authorized dealers control allocation and waitlists on the pieces everyone wants, which pushes real demand onto the grey market. Grey market is fine when the dealer is established and reputable — it is the random marketplace listing with "no returns, cash only" that gets people burned.',
+      'Step three: independent verification before money moves, every time. Not the seller\'s watchmaker — an independent one who opens the case back and checks the movement itself. On anything four figures and up, this step is non-negotiable.',
+      'Same principle as everything else we source: know the category cold, verify before committing, and take the risk off the client\'s hands. Drop a request and we will run the whole process for you.',
     ],
   },
   {
