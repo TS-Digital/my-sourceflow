@@ -84,7 +84,10 @@ export async function POST(
             <h2 style="margin-bottom:16px">Your Request Has Been Updated</h2>
             <p>Your sourcing request for <strong>${req.item_name}</strong> has a new status:</p>
             <p style="font-size:18px;font-weight:600;margin:16px 0">${newStatusName}</p>
-            <p style="color:#666">Log in to view the full details of your request.</p>
+            <p style="margin:24px 0">
+              <a href="https://theshopper.shop/login" style="display:inline-block;background:#c9a227;color:#111111;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:4px">Log In to View Your Request</a>
+            </p>
+            <p style="color:#666;font-size:13px">If the button doesn't work, visit https://theshopper.shop/login</p>
           </div>
         `,
       })

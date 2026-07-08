@@ -76,7 +76,10 @@ export async function POST(
             <h2 style="margin-bottom:16px">New Update on Your Request</h2>
             <p>Your concierge added a new note on your request for <strong>${req.item_name}</strong>:</p>
             <p style="font-size:16px;margin:16px 0;padding:16px;background:#f5f5f5;border-left:3px solid #c9a227;color:#111">${noteText}</p>
-            <p style="color:#666">Log in to view the full details of your request.</p>
+            <p style="margin:24px 0">
+              <a href="https://theshopper.shop/login" style="display:inline-block;background:#c9a227;color:#111111;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:4px">Log In to View Your Request</a>
+            </p>
+            <p style="color:#666;font-size:13px">If the button doesn't work, visit https://theshopper.shop/login</p>
           </div>
         `,
       })
