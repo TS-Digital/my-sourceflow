@@ -16,6 +16,7 @@ export const posts: Post[] = [
     title: 'THE JACQUEMUS X NIKE MOON SHOE',
     date: 'July 2026',
     featured: true,
+    image: '/journal/jacquemus-nike-moon-shoe-item-of-the-week.jp.jpg',
     excerpt:
       'Solange fronted the campaign, it sold out again within hours, and the waitlist keeps growing. The ballet-core sneaker moment just found its main character.',
     content: [
@@ -45,6 +46,7 @@ export const posts: Post[] = [
     category: 'OUTFIT BREAKDOWN',
     title: 'THE SOCCER CASUAL FIT',
     date: 'July 2026',
+    image: '/journal/the-soccer-casual-fit.jpg.jpg',
     excerpt:
       'Retro boot-inspired trainers, a boxy track top, tapered trousers. Terrace culture is back in the front row.',
     content: [
@@ -59,6 +61,7 @@ export const posts: Post[] = [
     category: 'CULTURE',
     title: 'WHY BALLET SNEAKERS ARE EVERYWHERE',
     date: 'July 2026',
+    image: '/journal/why-ballet-sneakers-are-everywhere.jpg.jpg',
     excerpt:
       'Soft, feminine, and suddenly on every It girl. We break down why the ballet sneaker beat the chunky trainer.',
     content: [
@@ -73,6 +76,7 @@ export const posts: Post[] = [
     category: 'SOURCING GUIDE',
     title: 'HOW TO SOURCE A WATCH WITHOUT GETTING BURNED',
     date: 'July 2026',
+    image: '/journal/how-to-source-a-watch-without-getting-burned.jpg.jpg',
     excerpt:
       'Superfakes are good enough to fool most jewellers now. Here is how we make sure what lands on your wrist is real.',
     content: [
