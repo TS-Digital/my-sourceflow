@@ -83,6 +83,8 @@ export async function POST(
             ${
               paymentLink
                 ? `<p style="margin:24px 0"><a href="${paymentLink}" style="display:inline-block;background:#c9a227;color:#111111;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:4px">Pay Now</a></p>
+                   <p style="color:#666;font-size:12px;margin-bottom:4px">Button not opening? Copy this link into your browser (Chrome/Safari, not an in-app browser):</p>
+                   <p style="color:#666;font-size:12px;word-break:break-all;margin-bottom:16px"><a href="${paymentLink}" style="color:#c9a227">${paymentLink}</a></p>
                    <p style="color:#666;font-size:13px">Please include reference <strong>${shortId}</strong> with your payment so we can match it to your order.</p>`
                 : ''
             }
