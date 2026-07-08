@@ -31,13 +31,13 @@ export async function POST(
   }
 
   const body = await request.json()
-  const { status_id } = body
+  const noteText = (body?.note_text as string | undefined)?.trim()
 
-  if (!status_id) {
-    return NextResponse.json({ error: 'status_id is required' }, { status: 400 })
+  if (!noteText) {
+    return NextResponse.json({ error: 'note_text is required' }, { status: 400 })
   }
 
-  // Fetch request details before updating so we have item_name + client_id
+  // Fetch request details so we have item_name + client_id for the email
   const { data: req } = await supabase
     .from('requests')
     .select('item_name, client_id')
@@ -48,26 +48,17 @@ export async function POST(
     return NextResponse.json({ error: 'Request not found' }, { status: 404 })
   }
 
-  // Update the status
-  const { error: updateError } = await supabase
-    .from('requests')
-    .update({ status_id })
-    .eq('id', id)
+  const { error: insertError } = await supabase.from('request_notes').insert({
+    request_id: id,
+    admin_id: user.id,
+    note_text: noteText,
+  })
 
-  if (updateError) {
-    return NextResponse.json({ error: updateError.message }, { status: 500 })
+  if (insertError) {
+    return NextResponse.json({ error: insertError.message }, { status: 500 })
   }
 
-  // Fetch the new status name
-  const { data: statusRow } = await supabase
-    .from('statuses')
-    .select('name')
-    .eq('id', status_id)
-    .single()
-
-  const newStatusName = statusRow?.name ?? 'Updated'
-
-  // Email the client — this must never break the status update itself
+  // Email the client about the new note — this must never break note creation
   try {
     const adminSupabase = createAdminClient()
     const { data: authData } = await adminSupabase.auth.admin.getUserById(req.client_id)
@@ -78,19 +69,19 @@ export async function POST(
       await resend.emails.send({
         from: fromEmail,
         to: clientEmail,
-        subject: `Your Request Has Been Updated — ${req.item_name}`,
+        subject: `New Update on Your Request — ${req.item_name}`,
         html: `
           <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-            <h2 style="margin-bottom:16px">Your Request Has Been Updated</h2>
-            <p>Your sourcing request for <strong>${req.item_name}</strong> has a new status:</p>
-            <p style="font-size:18px;font-weight:600;margin:16px 0">${newStatusName}</p>
+            <h2 style="margin-bottom:16px">New Update on Your Request</h2>
+            <p>Your concierge added a new note on your request for <strong>${req.item_name}</strong>:</p>
+            <p style="font-size:16px;margin:16px 0;padding:16px;background:#f5f5f5;border-left:3px solid #c9a227;color:#111">${noteText}</p>
             <p style="color:#666">Log in to view the full details of your request.</p>
           </div>
         `,
       })
     }
   } catch (err) {
-    console.error('Client status email failed:', err)
+    console.error('Client note email failed:', err)
   }
 
   return NextResponse.json({ success: true })

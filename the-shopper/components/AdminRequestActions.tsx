@@ -2,9 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 import type { Status } from '@/lib/types'
-
 
 interface Props {
   requestId: string
@@ -20,7 +18,6 @@ export default function AdminRequestActions({
   currentStatusId,
   statuses,
   statusTimeline,
-  currentStatusName,
   statusIdx,
 }: Props) {
   const [selectedStatusId, setSelectedStatusId] = useState(currentStatusId)
@@ -29,23 +26,26 @@ export default function AdminRequestActions({
   const [noteMsg, setNoteMsg] = useState('')
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
-  const supabase = createClient()
 
   const saveStatus = () => {
     startTransition(async () => {
       setStatusMsg('')
-      const res = await fetch(`/api/requests/${requestId}/status`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status_id: selectedStatusId }),
-      })
-      const json = await res.json()
-      if (!res.ok) {
-        setStatusMsg(json.error ?? 'Something went wrong.')
-        return
+      try {
+        const res = await fetch(`/api/requests/${requestId}/status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status_id: selectedStatusId }),
+        })
+        const json = await res.json().catch(() => ({}))
+        if (!res.ok) {
+          setStatusMsg(json.error ?? 'Something went wrong.')
+          return
+        }
+        setStatusMsg('Saved.')
+        router.refresh()
+      } catch {
+        setStatusMsg('Something went wrong.')
       }
-      setStatusMsg('Saved.')
-      router.refresh()
     })
   }
 
@@ -53,24 +53,23 @@ export default function AdminRequestActions({
     if (!noteText.trim()) return
     startTransition(async () => {
       setNoteMsg('')
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) return
-
-      const { error } = await supabase.from('request_notes').insert({
-        request_id: requestId,
-        admin_id: user.id,
-        note_text: noteText.trim(),
-      })
-
-      if (error) {
-        setNoteMsg(error.message)
-        return
+      try {
+        const res = await fetch(`/api/requests/${requestId}/notes`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ note_text: noteText.trim() }),
+        })
+        const json = await res.json().catch(() => ({}))
+        if (!res.ok) {
+          setNoteMsg(json.error ?? 'Something went wrong.')
+          return
+        }
+        setNoteText('')
+        setNoteMsg('Note added.')
+        router.refresh()
+      } catch {
+        setNoteMsg('Something went wrong.')
       }
-      setNoteText('')
-      setNoteMsg('Note added.')
-      router.refresh()
     })
   }
 
