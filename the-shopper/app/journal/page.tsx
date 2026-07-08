@@ -59,12 +59,12 @@ export default function JournalPage() {
 
             {/* Right: image */}
             {featuredPost.image && (
-              <div className="h-[400px]">
+              <div className="h-[400px] bg-[#0e0e10]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={featuredPost.image}
                   alt={featuredPost.title}
-                  className={`w-full h-full object-cover ${featuredPost.imagePosition ?? 'object-center'}`}
+                  className="w-full h-full object-contain"
                 />
               </div>
             )}
@@ -80,19 +80,19 @@ export default function JournalPage() {
             Recent posts
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {gridPosts.map(({ slug, category, title, excerpt, image, imagePosition }) => (
+            {gridPosts.map(({ slug, category, title, excerpt, image }) => (
               <Link
                 key={slug}
                 href={`/journal/${slug}`}
                 className="group bg-[#0e0e10] border border-white/5 p-7 flex flex-col gap-4 border-b-2 border-b-transparent hover:border-b-brand-gold transition-colors overflow-hidden"
               >
                 {image && (
-                  <div className="-mx-7 -mt-7">
+                  <div className="-mx-7 -mt-7 bg-[#0e0e10]">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={image}
                       alt={title}
-                      className={`w-full object-cover h-48 ${imagePosition ?? 'object-center'}`}
+                      className="w-full object-contain h-48"
                     />
                   </div>
                 )}
